@@ -4,6 +4,7 @@ import com.github.dunnololda.scage.ScageLib._
 import com.github.dunnololda.scage.ScageScreenApp
 import com.github.dunnololda.scage.support.tracer3.{CoordTracer, DefaultTrace}
 import com.github.dunnololda.scage.support.{ScageColor, Vec}
+import io.dylemma.frp._
 
 import scala.collection.mutable.ArrayBuffer
 

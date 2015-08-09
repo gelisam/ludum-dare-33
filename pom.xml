@@ -28,6 +28,11 @@
           <id>dunnololda's maven repo</id>
           <url>https://raw.github.com/dunnololda/mvn-repo/master</url>
     </repository>
+
+    <repository>
+          <id>jitpack.io</id>
+          <url>https://jitpack.io</url>
+    </repository>
   </repositories>
 
   <pluginRepositories>
@@ -62,6 +67,12 @@
         <artifactId>scage_2.10</artifactId>
         <version>${scage.version}</version>
         <scope>compile</scope>
+    </dependency>
+    
+    <dependency>
+        <groupId>com.github.dylemma</groupId>
+        <artifactId>scala.frp</artifactId>
+        <version>3ca4c4cf7f0a207d7fc8245b33d48c04a3a2d7f9</version>
     </dependency>
   </dependencies>
 
