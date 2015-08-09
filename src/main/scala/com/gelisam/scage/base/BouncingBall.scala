@@ -7,18 +7,48 @@ import com.github.dunnololda.scage.support.{ScageColor, Vec}
 
 import scala.collection.mutable.ArrayBuffer
 
-object BouncingBall extends ScageScreenApp("Bounding Ball", 640, 480) {
-  init {
-  }
-  action(10) {
-  }
+object Settings {
+  val worldSize = Vec(640, 480)
+  val pixelsPerSecond = 500.0
+  val ballRadius = 10
+}
+
+object BouncingBall extends ScageScreenApp("Bounding Ball", Settings.worldSize.ix, Settings.worldSize.iy) {
+  var ballPos = Settings.worldSize / 2
+  var ballDir = Vec(1,1)
+  
+  keyIgnorePause(KEY_ESCAPE, onKeyDown = {
+    stopApp()
+  })
   keyIgnorePause(KEY_SPACE, onKeyDown = {
     switchPause()
   })
 
-  render(-10) {
+  var lastTimestamp = 0L
+  init {
+    lastTimestamp = System.currentTimeMillis
+  }
+  action {
+    val now = System.currentTimeMillis
+    val seconds = (now - lastTimestamp).toDouble / 1000
+    lastTimestamp = now
+    
+    val pixels = Settings.pixelsPerSecond * seconds
+    ballPos += pixels * ballDir
+    
+    if (ballPos.x - Settings.ballRadius < 0)
+      ballDir = ballDir.copy(x = 1)
+    if (ballPos.y - Settings.ballRadius < 0)
+      ballDir = ballDir.copy(y = 1)
+    if (ballPos.x + Settings.ballRadius > Settings.worldSize.x)
+      ballDir = ballDir.copy(x = -1)
+    if (ballPos.y + Settings.ballRadius > Settings.worldSize.y)
+      ballDir = ballDir.copy(y = -1)
+  }
+  render {
+    drawFilledCircle(ballPos, Settings.ballRadius, ScageColor.RED)
     if (onPause) {
-      print("PAUSE. PRESS SPACE",        windowCenter, DARK_GRAY, align = "center")
+      print(s"PAUSED",        windowCenter, DARK_GRAY, align = "center")
     }
   }
 }
