@@ -29,9 +29,10 @@ object BouncingBall
   lazy val timeSinceStartB: Behavior[Double] = (timeB map2 timeAtStartB)(_-_)
   
   lazy val startPosB: Behavior[Vec] = Behavior.stepper(center, bounceE.map(_ => ballPosB))
-  lazy val ballPosB: Behavior[Vec] = Behavior.stepper(center, timeSinceStartB.changeE.map(t =>
-    startPosB.value + ballDirB.value * t * pixelsPerSecond
-  ))
+  lazy val ballPosE: EventStream[Vec] = tickE.map(_ =>
+    startPosB.value + ballDirB.value * timeSinceStartB.value * pixelsPerSecond
+  )
+  lazy val ballPosB: Behavior[Vec] = Behavior.stepper(center, ballPosE)
   
   lazy val ballDxB = Behavior.stepper(1,
     bounceRightE.map(_ => 1) ||
@@ -43,10 +44,10 @@ object BouncingBall
   )
   lazy val ballDirB = (ballDxB map2 ballDyB)(Vec(_,_))
   
-  lazy val bounceRightE = tickE.filter(_ => ballPosB.x - ballRadius < 0)
-  lazy val bounceUpE    = tickE.filter(_ => ballPosB.y - ballRadius < 0)
-  lazy val bounceLeftE  = tickE.filter(_ => ballPosB.x + ballRadius > worldSize.x)
-  lazy val bounceDownE  = tickE.filter(_ => ballPosB.y + ballRadius > worldSize.y)
+  lazy val bounceRightE = ballPosE.filter(ball => ball.x - ballRadius < 0)
+  lazy val bounceUpE    = ballPosE.filter(ball => ball.y - ballRadius < 0)
+  lazy val bounceLeftE  = ballPosE.filter(ball => ball.x + ballRadius > worldSize.x)
+  lazy val bounceDownE  = ballPosE.filter(ball => ball.y + ballRadius > worldSize.y)
   lazy val bounceE = bounceRightE ||
                      bounceUpE    ||
                      bounceLeftE  ||
