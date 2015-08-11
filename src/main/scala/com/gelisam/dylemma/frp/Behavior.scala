@@ -2,7 +2,7 @@ package com.gelisam.dylemma.frp
 
 import io.dylemma.frp._
 
-case class Behavior[A](var value: A, changeE: EventStream[A])(implicit obs: Observer) {
+case class Behavior[A](var value: A, private var changeE: EventStream[A])(implicit obs: Observer) {
   {
     var nextValue = value
     changeE.foreach(nextValue = _)
