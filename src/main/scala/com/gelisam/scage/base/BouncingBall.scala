@@ -19,7 +19,7 @@ object Settings {
 import Settings._
 
 object BouncingBall
-  extends ScageScreenApp("Bounding Ball", worldSize.ix, worldSize.iy)
+  extends ScageScreenApp("Bouncing Ball", worldSize.ix, worldSize.iy)
   with Observer
 {
   val tickE = EventSource[Long]  // in milliseconds
