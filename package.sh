@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+
+NAME=bouncing_ball
+rm -rf "${NAME}.zip"
+
+sed -i -e 's/^os.type = [a-z]*$/os.type = windows/g' build.properties
+mvn package
+
+sed -i -e 's/^os.type = [a-z]*$/os.type = linux/g' build.properties
+mvn package
+
+cp target/*-windows.dir/run.bat target/*-linux.dir/
+
+mv target/*-linux.dir "$NAME"
+zip -r "${NAME}.zip" "$NAME"
