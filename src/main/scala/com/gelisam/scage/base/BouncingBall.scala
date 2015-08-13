@@ -3,12 +3,7 @@ package com.gelisam.scage.base
 import com.gelisam.dylemma.frp.Behavior
 
 import com.github.dunnololda.scage.ScageLib._
-import com.github.dunnololda.scage.ScageScreenApp
-import com.github.dunnololda.scage.support.tracer3.{CoordTracer, DefaultTrace}
-import com.github.dunnololda.scage.support.{ScageColor, Vec}
 import io.dylemma.frp._
-
-import scala.collection.mutable.ArrayBuffer
 
 object Settings {
   val worldSize = Vec(640, 480)
