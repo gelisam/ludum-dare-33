@@ -2,7 +2,7 @@
 set -e
 
 NAME=bouncing_ball
-rm -rf "${NAME}.zip"
+rm -rf "$NAME" "${NAME}.zip"
 
 sed -i '' -e 's/^os.type = [a-z]*$/os.type = windows/g' build.properties
 mvn package -Dmaven.test.skip=true
