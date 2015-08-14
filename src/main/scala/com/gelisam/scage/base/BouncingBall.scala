@@ -1,6 +1,7 @@
 package com.gelisam.scage.base
 
 import com.gelisam.dylemma.frp.Behavior
+import com.gelisam.scage.Sound
 
 import com.github.dunnololda.scage.ScageLib._
 import io.dylemma.frp._
@@ -61,10 +62,17 @@ object BouncingBall
     tickE fire msecsFromInitWithoutPause
     Behavior.updateBehaviors
   }
+  
   render {
     drawFilledCircle(ballPosB, ballRadius, ScageColor.RED)
     if (onPause) {
       print(s"PAUSED",        windowCenter, DARK_GRAY, align = "center")
     }
+  }
+  
+  
+  val bop = Sound("media/bop.wav")
+  init {
+    bounceE.foreach(_ => bop.play)
   }
 }
