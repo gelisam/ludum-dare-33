@@ -5,13 +5,26 @@ import javax.sound.sampled._
 
 // I can't believe it! The API really requires us to read from the disk every time??
 case class Sound(private val file: File) {
-  def play = {
-    val clip = Sound.loadClip(file)
-    clip.start
+  def play = if (Sound.enabled) {
+    try {
+      val clip = Sound.loadClip(file)
+      clip.start
+    } catch {
+      case e: java.lang.IllegalArgumentException => {
+        println("No sound card found, disabling sounds.")
+        Sound.enabled = false
+      }
+      case e: java.io.FileNotFoundException => {
+        println("wav files not found, disabling sounds.")
+        Sound.enabled = false
+      }
+    }
   }
 }
 
 object Sound {
+  var enabled = true
+  
   // Need to mess with the classloader, see http://stackoverflow.com/a/25083123/3286185
   def loadClip(file: File): Clip = {
     val cl = classOf[javax.sound.sampled.AudioSystem].getClassLoader
