@@ -33,6 +33,14 @@ object Sound {
       Thread.currentThread.setContextClassLoader(cl)
       val clip: Clip = AudioSystem.getClip
       clip.open(AudioSystem.getAudioInputStream(file))
+      
+      // prevent a memory leak
+      clip.addLineListener(new LineListener() {
+        def update(event: LineEvent) =
+          if (event.getType() == LineEvent.Type.STOP)
+            event.getLine().close()
+      })
+      
       clip
     } finally Thread.currentThread.setContextClassLoader(old)
   }

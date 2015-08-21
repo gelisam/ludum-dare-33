@@ -61,6 +61,12 @@ object BouncingBall
   action {
     tickE fire msecsFromInitWithoutPause
     Behavior.updateBehaviors
+    
+    // Check for memory leaks. Enabling this will make the game super slow, but if there are
+    // no leaks the amount of allocated memory should stay relatively constant.
+    //System.gc()
+    //val runtime = Runtime.getRuntime()
+    //println(runtime.totalMemory() - runtime.freeMemory())
   }
   
   render {
