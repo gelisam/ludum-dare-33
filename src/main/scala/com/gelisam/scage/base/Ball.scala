@@ -10,18 +10,18 @@ import com.github.dunnololda.scage.ScageLib._
 import io.dylemma.frp._
 
 class Ball(
-  renderer: Renderer,
+  scage: Renderer,
   timeE: EventStream[Double],
   timeB: Behavior[Double]
 )(implicit observer: Observer) {
   lazy val timeAtStartB: Behavior[Double] = Behavior.stepper(0.0, bounceE.map(_ => timeB))
   lazy val timeSinceStartE: EventStream[Double] = timeE.map(_ - timeAtStartB)
   
-  lazy val startPosB: Behavior[Vec] = Behavior.stepper(renderer.center, bounceE.map(ball => ball))
+  lazy val startPosB: Behavior[Vec] = Behavior.stepper(scage.center, bounceE.map(ball => ball))
   lazy val ballPosE: EventStream[Vec] = timeSinceStartE.map(t =>
     startPosB.value + ballDirB.value * t * pixelsPerSecond
   )
-  lazy val ballPosB: Behavior[Vec] = Behavior.stepper(renderer.center, ballPosE)
+  lazy val ballPosB: Behavior[Vec] = Behavior.stepper(scage.center, ballPosE)
   
   lazy val ballDxB: Behavior[Int] = Behavior.stepper(1,
     bounceRightE.map(_ => 1) ||
