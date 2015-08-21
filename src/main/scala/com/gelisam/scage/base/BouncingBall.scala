@@ -17,6 +17,7 @@ object BouncingBall
   val timeB = Behavior.stepper(0.0, timeE)
   
   val ball = new Ball(this, timeE, timeB)
+  val cursor = new Cursor(this)
   
   keyIgnorePause(KEY_ESCAPE, onKeyDown = {
     stopApp()
@@ -38,6 +39,7 @@ object BouncingBall
   
   render {
     ball.render()
+    cursor.render()
     
     if (onPause) {
       print(s"PAUSED",        windowCenter, DARK_GRAY, align = "center")
