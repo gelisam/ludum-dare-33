@@ -33,7 +33,7 @@ class Cursor(
     if (config.contains(name_x) && config.contains(name_y))
       Vec(config[Double](name_x), config[Double](name_y))
     else
-      scage.center
+      Vec(0, 0)
   def saveCursor = {
     config = config.set(name_x, cursorPos.x)
     config = config.set(name_y, cursorPos.y)
@@ -42,7 +42,7 @@ class Cursor(
   
   var cursorPos = loadCursor
   def moveCursor(newPos: Vec) = if (enabled) {
-    cursorPos = newPos
+    cursorPos = newPos - scage.center
   }
   
   scage.key(KEY_GRAVE, onKeyDown = toggle)
@@ -57,7 +57,8 @@ class Cursor(
   def render() = if (enabled) {
     print(s"${cursorPos}", scage.windowCenter, DARK_GRAY, align = "center")
     
-    drawLine(cursorPos - Vec(10, 0), cursorPos + Vec(10, 0), ScageColor.WHITE)
-    drawLine(cursorPos - Vec(0, 10), cursorPos + Vec(0, 10), ScageColor.WHITE)
+    var pos = scage.center + cursorPos
+    drawLine(pos - Vec(10, 0), pos + Vec(10, 0), ScageColor.WHITE)
+    drawLine(pos - Vec(0, 10), pos + Vec(0, 10), ScageColor.WHITE)
   }
 }
