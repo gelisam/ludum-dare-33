@@ -1,6 +1,6 @@
 package com.gelisam.scage.base
 
-import com.gelisam.scage.base.Ball
+import com.gelisam.scage.base._
 import com.gelisam.scage.base.Settings._
 
 import com.gelisam.dylemma.frp.Behavior
