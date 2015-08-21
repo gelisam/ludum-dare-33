@@ -27,6 +27,8 @@ class Cursor(
   )
   
   def render() {
+    print(s"${cursorPos}", scage.windowCenter, DARK_GRAY, align = "center")
+    
     drawLine(cursorPos - Vec(10, 0), cursorPos + Vec(10, 0), ScageColor.WHITE)
     drawLine(cursorPos - Vec(0, 10), cursorPos + Vec(0, 10), ScageColor.WHITE)
   }
