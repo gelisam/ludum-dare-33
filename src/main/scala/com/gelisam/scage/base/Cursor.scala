@@ -9,6 +9,7 @@ import com.github.dunnololda.scage.handlers.Renderer
 import com.github.dunnololda.scage.handlers.controller2.ScageController
 import com.github.dunnololda.scage.ScageLib._
 import io.dylemma.frp._
+import org.streum.configrity.Configuration
 
 import java.awt.event.KeyEvent
 
@@ -16,10 +17,30 @@ class Cursor(
   scage: ScageController with Renderer
 )(implicit observer: Observer) {
   var enabled = false
-  def toggle =
+  def toggle = {
+    if (enabled) {
+      saveCursor
+    }
     enabled = !enabled
+  }
   
-  var cursorPos = scage.center
+  val filename = "constants.conf"
+  var config = Configuration.load(filename)
+  val name = "cursor"
+  val name_x = s"${name}.x"
+  val name_y = s"${name}.y"
+  def loadCursor: Vec =
+    if (config.contains(name_x) && config.contains(name_y))
+      Vec(config[Double](name_x), config[Double](name_y))
+    else
+      scage.center
+  def saveCursor = {
+    config = config.set(name_x, cursorPos.x)
+    config = config.set(name_y, cursorPos.y)
+    config.save(filename)
+  }
+  
+  var cursorPos = loadCursor
   def moveCursor(newPos: Vec) = if (enabled) {
     cursorPos = newPos
   }

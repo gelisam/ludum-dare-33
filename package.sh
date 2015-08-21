@@ -14,4 +14,5 @@ cp target/*-windows.dir/run.bat target/*-linux.dir/
 
 mv target/*-linux.dir "$NAME"
 cp -r media "$NAME"
+cp constants.conf "$NAME"
 zip -r "${NAME}.zip" "$NAME"
