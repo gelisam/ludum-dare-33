@@ -13,8 +13,21 @@ import io.dylemma.frp._
 class Cursor(
   scage: ScageController with Renderer
 )(implicit observer: Observer) {
+  var cursorPos = scage.center
+  def moveCursor(newPos: Vec) {
+    cursorPos = newPos
+  }
+  
+  scage.leftMouse(
+    onBtnDown = moveCursor(_),
+    onBtnUp = moveCursor(_)
+  )
+  scage.leftMouseDrag(
+    onDrag = moveCursor(_)
+  )
+  
   def render() {
-    drawLine(scage.center - Vec(10, 0), scage.center + Vec(10, 0), ScageColor.WHITE)
-    drawLine(scage.center - Vec(0, 10), scage.center + Vec(0, 10), ScageColor.WHITE)
+    drawLine(cursorPos - Vec(10, 0), cursorPos + Vec(10, 0), ScageColor.WHITE)
+    drawLine(cursorPos - Vec(0, 10), cursorPos + Vec(0, 10), ScageColor.WHITE)
   }
 }
