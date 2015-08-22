@@ -52,10 +52,22 @@ object Main
   val heroSprite = Sprite("hero.png", 3)
   val heroPos = Adjustable[Vec]("heroPos")
   
+  val hpBarSprite = Sprite("hp-bar.png")
+  val hpBarPos = Adjustable[Vec]("hpBarPos")
+  
+  val menuSprite = Sprite("menu.png")
+  val menuPos = Adjustable[Vec]("menuPos")
+  
+  val messageBoxSprite = Sprite("message-box.png")
+  val messageBoxPos = Adjustable[Vec]("messageBoxPos")
+  
   render {
     fightBackgroundSprite.render(Vec(192, -16) + fightBackgroundPos)
     monsterSprite.render(monsterPos)
     heroSprite.render(heroPos)
+    hpBarSprite.render(Vec(194, -189) + hpBarPos)
+    menuSprite.render(Vec(-234, -215) + menuPos)
+    messageBoxSprite.render(Vec(200, 165) + messageBoxPos)
     
     Adjust.render(this)
     
