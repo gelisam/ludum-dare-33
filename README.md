@@ -1,6 +1,8 @@
 Treasure Chest Life - Ludum Dare 33
 ===
 
+![Concept art for the game: a hero fights a monster, but the menu of commands is on the side of the monster.](media/concept-art.png)
+
 In progress.
 
 ![An FFII screenshot in which the player opens a box and a message says "Monster-in-a-box!"](http://img1.wikia.nocookie.net/__cb20100709014445/finalfantasy/images/5/54/Monster_in_a_box_FFII.png)
