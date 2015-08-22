@@ -43,6 +43,9 @@ object Main
     //println(runtime.totalMemory() - runtime.freeMemory())
   }
   
+  val fightBackgroundSprite = Sprite("fight-background.png")
+  val fightBackgroundPos = Adjustable[Vec]("fightBackgroundPos")
+  
   val monsterSprite = Sprite("monster.png", 5)
   val monsterPos = Adjustable[Vec]("monsterPos")
   
@@ -50,6 +53,7 @@ object Main
   val heroPos = Adjustable[Vec]("heroPos")
   
   render {
+    fightBackgroundSprite.render(Vec(192, -16) + fightBackgroundPos)
     monsterSprite.render(monsterPos)
     heroSprite.render(heroPos)
     
