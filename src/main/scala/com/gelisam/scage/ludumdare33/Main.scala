@@ -43,7 +43,7 @@ object Main
     //println(runtime.totalMemory() - runtime.freeMemory())
   }
   
-  val fightBackgroundSprite = Sprite("fight-background.png")
+  val fightBackgroundSprite = Sprite("fight-background.png", 4)
   val fightBackgroundPos = Adjustable[Vec]("fightBackgroundPos")
   
   val monsterSprite = Sprite("monster.png", 5)
