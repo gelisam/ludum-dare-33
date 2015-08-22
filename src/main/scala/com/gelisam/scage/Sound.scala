@@ -1,4 +1,4 @@
-// Place your sound files in the src/main/resources/resources/sounds folder.
+// Place your OGG files in the src/main/resources/resources/sounds folder.
 package com.gelisam.scage
 
 import org.newdawn.slick.util.ResourceLoader
