@@ -1,50 +1,63 @@
+// Place your sound files in the src/main/resources/resources/sounds folder.
 package com.gelisam.scage
 
-import java.io._
-import javax.sound.sampled._
+import org.newdawn.slick.util.ResourceLoader
+import org.newdawn.slick.openal.{SoundStore, Audio, AudioLoader}
 
-// I can't believe it! The API really requires us to read from the disk every time??
-case class Sound(private val file: File) {
+import com.github.dunnololda.scage.Scage
+
+class Sound(audio: Audio) {
   def play = if (Sound.enabled) {
-    try {
-      val clip = Sound.loadClip(file)
-      clip.start
-    } catch {
-      case e: java.lang.IllegalArgumentException => {
-        println("No sound card found, disabling sounds.")
-        Sound.enabled = false
-      }
-      case e: java.io.FileNotFoundException => {
-        println("wav files not found, disabling sounds.")
-        Sound.enabled = false
-      }
-    }
+    audio.playAsSoundEffect(1, 1, false) 
+  }
+  
+  def stop = if (Sound.enabled) {
+    audio.stop
+  }
+}
+
+class Music(audio: Audio) {
+  def play = if (Sound.enabled) {
+    audio.playAsMusic(1, 1, true) 
   }
 }
 
 object Sound {
   var enabled = true
   
-  // Need to mess with the classloader, see http://stackoverflow.com/a/25083123/3286185
-  def loadClip(file: File): Clip = {
-    val cl = classOf[javax.sound.sampled.AudioSystem].getClassLoader
-    val old = Thread.currentThread.getContextClassLoader
-    try {
-      Thread.currentThread.setContextClassLoader(cl)
-      val clip: Clip = AudioSystem.getClip
-      clip.open(AudioSystem.getAudioInputStream(file))
-      
-      // prevent a memory leak
-      clip.addLineListener(new LineListener() {
-        def update(event: LineEvent) =
-          if (event.getType() == LineEvent.Type.STOP)
-            event.getLine().close()
-      })
-      
-      clip
-    } finally Thread.currentThread.setContextClassLoader(old)
+  def init(scage: Scage) = {
+    scage.action {
+      SoundStore.get().poll(0)
+    }
   }
   
-  def apply(filename: String): Sound =
-    Sound(new File(filename))
+  def apply(filename: String): Sound = new Sound({
+    try {
+      val fullFilename = s"resources/sounds/${filename}"
+      val url = ResourceLoader.getResource(fullFilename)
+      AudioLoader.getAudio("OGG", url.openStream())
+    } catch {
+      case e: java.lang.RuntimeException => {
+        println("sound files not found, disabling sounds.")
+        Sound.enabled = false
+        null
+      }
+    }
+  })
+}
+
+object Music {
+  def apply(filename: String): Sound = new Sound({
+    try {
+      val fullFilename = s"resources/sounds/${filename}"
+      val url = ResourceLoader.getResource(fullFilename)
+      AudioLoader.getStreamingAudio("OGG", url)
+    } catch {
+      case e: java.lang.RuntimeException => {
+        println("sound files not found, disabling sounds.")
+        Sound.enabled = false
+        null
+      }
+    }
+  })
 }
