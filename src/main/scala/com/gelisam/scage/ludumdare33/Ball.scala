@@ -1,6 +1,6 @@
-package com.gelisam.scage.base
+package com.gelisam.scage.ludumdare33
 
-import com.gelisam.scage.base.Settings._
+import com.gelisam.scage.ludumdare33.Settings._
 
 import com.gelisam.dylemma.frp.Behavior
 import com.gelisam.scage.adjust._

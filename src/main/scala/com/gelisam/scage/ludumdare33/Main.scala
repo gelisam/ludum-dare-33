@@ -1,16 +1,16 @@
-package com.gelisam.scage.base
+package com.gelisam.scage.ludumdare33
 
 import com.gelisam.scage.adjust._
-import com.gelisam.scage.base._
-import com.gelisam.scage.base.Settings._
+import com.gelisam.scage.ludumdare33._
+import com.gelisam.scage.ludumdare33.Settings._
 
 import com.gelisam.dylemma.frp.Behavior
 
 import com.github.dunnololda.scage.ScageLib._
 import io.dylemma.frp._
 
-object BouncingBall
-  extends ScageScreenApp("Bouncing Ball", worldSize.ix, worldSize.iy)
+object Main
+  extends ScageScreenApp("Treasure Chest Life - Ludum Dare 33", worldSize.ix, worldSize.iy)
   with Observer
 {
   val tickE = EventSource[Long]      // in milliseconds

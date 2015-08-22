@@ -1,4 +1,4 @@
-package com.gelisam.scage.base
+package com.gelisam.scage.ludumdare33
 
 import com.github.dunnololda.scage.ScageLib._
 

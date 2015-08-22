@@ -1,4 +1,4 @@
-package com.gelisam.scage.base
+package com.gelisam.scage.ludumdare33
 
 import junit.framework._
 import Assert._
@@ -23,7 +23,7 @@ class ScageAppTest extends TestCase("app") {
      * Rigourous Tests :-)
      */
     def testOK() = {
-      BouncingBall.main(Array[String]())
+      Main.main(Array[String]())
       assertTrue(true)
     }
     //def testKO() = assertTrue(false);
