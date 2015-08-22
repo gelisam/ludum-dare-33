@@ -37,9 +37,14 @@ class Menu(scage: ScageController) {
   }
   
   scage.key(KEY_DOWN, onKeyDown = incr)
+  scage.key(KEY_S, onKeyDown = incr)
+  scage.key(KEY_J, onKeyDown = incr)
   scage.key(KEY_UP, onKeyDown = decr)
+  scage.key(KEY_W, onKeyDown = decr)
+  scage.key(KEY_K, onKeyDown = decr)
   scage.key(KEY_RETURN, onKeyDown = select)
   scage.key(KEY_Z, onKeyDown = select)
+  scage.key(KEY_E, onKeyDown = select)
   
   def render {
     openglLocalTransform {
