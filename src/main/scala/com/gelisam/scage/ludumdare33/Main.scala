@@ -45,8 +45,13 @@ object Main
   
   val monsterSprite = Sprite("monster.png", 5)
   val monsterPos = Adjustable[Vec]("monsterPos")
+  
+  val heroSprite = Sprite("hero.png", 3)
+  val heroPos = Adjustable[Vec]("heroPos")
+  
   render {
     monsterSprite.render(monsterPos)
+    heroSprite.render(heroPos)
     
     Adjust.render(this)
     
