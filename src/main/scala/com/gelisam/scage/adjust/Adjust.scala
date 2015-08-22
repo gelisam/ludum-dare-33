@@ -42,8 +42,9 @@ object CursorConfig {
 }
 
 object Cursor {
-  val config = Configuration.load("constants.conf")
-  val cursors = Map[String,Cursor]()
+  private val config = Configuration.load("constants.conf")
+  private var cursorArray = Array[Cursor]()
+  private val cursorMap = Map[String,Cursor]()
   
   def fromFrac(frac: Double): Cursor = {
     def limit(lo: Int, x: Int, hi: Int): Int
@@ -52,18 +53,24 @@ object Cursor {
         hi
       )
     
-    val i = limit(0, (frac * cursors.size).toInt, cursors.size - 1)
-    val xs = cursors.values.toArray[Cursor]
-    xs(i)
+    val i = limit(0, (frac * cursorArray.size).toInt, cursorArray.size - 1)
+    cursorArray(i)
   }
   
   def apply(
     name: String,
     mkCursor: (String, Vec) => Cursor = new Cursor(_,_)
-  ): Cursor = cursors.getOrElseUpdate(name, {
-    val pos = CursorConfig.load(name)
-    mkCursor(name, pos)
-  })
+  ): Cursor = {
+    val newCursor = cursorMap.getOrElseUpdate(name, {
+      val pos = CursorConfig.load(name)
+      mkCursor(name, pos)
+    })
+    
+    val sortedKeys = cursorMap.keys.filter(_ != "cursorPicker").toArray.sorted
+    cursorArray = sortedKeys.map(cursorMap(_))
+    
+    newCursor
+  }
 }
 
 object Adjust {
