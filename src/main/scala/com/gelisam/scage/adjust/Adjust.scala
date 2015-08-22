@@ -55,9 +55,9 @@ object Cursor {
 }
 
 object Adjust {
-  var cursorPicker: Cursor = null
-  var cursorA: Cursor = null
-  var cursorB: Cursor = null
+  val cursorPicker = Cursor("cursorPicker")
+  val cursorA = Cursor("cursorA")
+  val cursorB = Cursor("cursorB")
   
   sealed trait Mode
   case class Disabled() extends Mode
@@ -83,10 +83,6 @@ object Adjust {
       case Adjust.PickCursor() => cursorPicker.pos = newPos - scage.center
       case Adjust.PickValue(cursor) => cursor.pos = newPos - scage.center
     }
-    
-    cursorPicker = Cursor("cursorPicker")
-    cursorA = Cursor("cursorA")
-    cursorB = Cursor("cursorB")
     
     scage.key(KEY_GRAVE, onKeyDown = toggle)
     scage.leftMouse(
