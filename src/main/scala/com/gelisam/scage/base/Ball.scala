@@ -3,6 +3,8 @@ package com.gelisam.scage.base
 import com.gelisam.scage.base.Settings._
 
 import com.gelisam.dylemma.frp.Behavior
+import com.gelisam.scage.adjust._
+import com.gelisam.scage.adjust.Predef._
 import com.gelisam.scage.Sound
 
 import com.github.dunnololda.scage.handlers.Renderer
@@ -43,8 +45,9 @@ class Ball(
                      bounceLeftE  ||
                      bounceDownE
   
+  val ballColor = Adjustable[ScageColor]("ballColor")
   def render() {
-    drawFilledCircle(ballPosB, ballRadius, ScageColor.RED)
+    drawFilledCircle(ballPosB, ballRadius, ballColor)
   }
   
   val bop = Sound("media/bop.wav")

@@ -75,8 +75,6 @@ object Cursor {
 
 object Adjust {
   val cursorPicker = Cursor("cursorPicker")
-  val cursorA = Adjustable[Vec]("cursorA")
-  val cursorB = Adjustable[ScageColor]("cursorB")
   
   def pickedCursor(scage: Renderer): Cursor = {
     val frac = cursorPicker.pos.x / scage.center.x
