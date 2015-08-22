@@ -77,7 +77,7 @@ object Adjust {
   val cursorPicker = Cursor("cursorPicker")
   
   def pickedCursor(scage: Renderer): Cursor = {
-    val frac = cursorPicker.pos.x / scage.center.x
+    val frac = cursorPicker.pos.x / scage.windowCenter.x
     val positiveFrac = (frac + 1) / 2
     Cursor.fromFrac(positiveFrac)
   }
@@ -90,6 +90,8 @@ object Adjust {
   var mode: Adjust.Mode = Adjust.Disabled()
   
   def init(scage: ScageController with Renderer) = {
+    scage.center = Vec(0, 0)
+    
     def toggle = mode = mode match {
       case Adjust.Disabled() => Adjust.PickCursor()
       case Adjust.PickCursor() => Adjust.PickValue(pickedCursor(scage))
@@ -101,8 +103,8 @@ object Adjust {
     
     def moveCursor(newPos: Vec) = mode match {
       case Adjust.Disabled() => {}
-      case Adjust.PickCursor() => cursorPicker.pos = newPos - scage.center
-      case Adjust.PickValue(cursor) => cursor.pos = newPos - scage.center
+      case Adjust.PickCursor() => cursorPicker.pos = newPos - scage.windowCenter
+      case Adjust.PickValue(cursor) => cursor.pos = newPos - scage.windowCenter
     }
     
     scage.key(KEY_GRAVE, onKeyDown = toggle)
@@ -117,19 +119,18 @@ object Adjust {
   
   def render(scage: Renderer) = {
     def renderCursor(cursor: Cursor) = {
-      var pos = scage.center + cursor.pos
-      drawLine(pos - Vec(10, 0), pos + Vec(10, 0), ScageColor.WHITE)
-      drawLine(pos - Vec(0, 10), pos + Vec(0, 10), ScageColor.WHITE)
+      drawLine(cursor.pos - Vec(10, 0), cursor.pos + Vec(10, 0), ScageColor.WHITE)
+      drawLine(cursor.pos - Vec(0, 10), cursor.pos + Vec(0, 10), ScageColor.WHITE)
     }
     
     mode match {
       case Adjust.Disabled() => {}
       case Adjust.PickCursor() => {
-        print(s"${pickedCursor(scage).name}", scage.windowCenter, DARK_GRAY, align = "center")
+        print(s"${pickedCursor(scage).name}", Vec(0, 0), DARK_GRAY, align = "center")
         renderCursor(cursorPicker)
       }
       case Adjust.PickValue(cursor) => {
-        print(s"${cursor}", scage.windowCenter, DARK_GRAY, align = "center")
+        print(s"${cursor}", Vec(0, 0), DARK_GRAY, align = "center")
         renderCursor(cursor)
       }
     }
