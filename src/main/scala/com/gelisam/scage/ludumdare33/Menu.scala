@@ -26,15 +26,20 @@ class Menu(scage: ScageController) {
     if (pointer >= cmdArray.length) pointer = 0
     if (cmdArray(pointer) == "") incr
   }
-  
   def decr {
     pointer -= 1
     if (pointer < 0) pointer = cmdArray.length - 1
     if (cmdArray(pointer) == "") decr
   }
+  def select {
+    val cmd = cmdArray(pointer)
+    println(cmd)
+  }
   
   scage.key(KEY_DOWN, onKeyDown = incr)
   scage.key(KEY_UP, onKeyDown = decr)
+  scage.key(KEY_RETURN, onKeyDown = select)
+  scage.key(KEY_Z, onKeyDown = select)
   
   def render {
     openglLocalTransform {
