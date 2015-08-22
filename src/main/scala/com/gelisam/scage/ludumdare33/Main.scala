@@ -50,7 +50,7 @@ object Main
   val hero = new Hero
   
   val hpBar = new HpBar(monster, hero)
-  val menu = new Menu
+  val menu = new Menu(this)
   val messageBox = new MessageBox
   
   render {
