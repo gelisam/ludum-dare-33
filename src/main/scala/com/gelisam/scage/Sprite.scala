@@ -5,14 +5,16 @@ import com.github.dunnololda.scage.ScageLib._
 import org.lwjgl.opengl.GL11
 
 class Sprite(spriteId: Int) {
-  def render(offset: Vec = Vec(0, 0)) =
+  def render(offset: Vec = Vec(0, 0)) = {
+    // make pixels crisp
+    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+    
     drawDisplayList(spriteId, offset)
+  }
 }
 
 object Sprite {
   def init(scage: Object) = {
-    // make pixels crisp
-    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
   }
   
   def apply(filename: String, scale: Int = 1): Sprite = {
