@@ -45,6 +45,18 @@ object Cursor {
   val config = Configuration.load("constants.conf")
   val cursors = Map[String,Cursor]()
   
+  def fromFrac(frac: Double): Cursor = {
+    def limit(lo: Int, x: Int, hi: Int): Int
+      = Math.min(
+        Math.max(lo, x),
+        hi
+      )
+    
+    val i = limit(0, (frac * cursors.size).toInt, cursors.size - 1)
+    val xs = cursors.values.toArray[Cursor]
+    xs(i)
+  }
+  
   def apply(
     name: String,
     mkCursor: (String, Vec) => Cursor = new Cursor(_,_)
@@ -59,25 +71,29 @@ object Adjust {
   val cursorA = Adjustable[Vec]("cursorA")
   val cursorB = Adjustable[ScageColor]("cursorB")
   
+  def pickedCursor(scage: Renderer): Cursor = {
+    val frac = cursorPicker.pos.x / scage.center.x
+    val positiveFrac = (frac + 1) / 2
+    Cursor.fromFrac(positiveFrac)
+  }
+  
   sealed trait Mode
   case class Disabled() extends Mode
   case class PickCursor() extends Mode
   case class PickValue(cursor: Cursor) extends Mode
   
   var mode: Adjust.Mode = Adjust.Disabled()
-  def toggle = mode = mode match {
-    case Adjust.Disabled() => Adjust.PickCursor()
-    case Adjust.PickCursor() => Adjust.PickValue(
-      if (cursorPicker.pos.x <= 0) cursorA
-      else cursorB
-    )
-    case Adjust.PickValue(cursor) => {
-      CursorConfig.save(cursor)
-      Adjust.Disabled()
-    }
-  }
   
   def init(scage: ScageController with Renderer) = {
+    def toggle = mode = mode match {
+      case Adjust.Disabled() => Adjust.PickCursor()
+      case Adjust.PickCursor() => Adjust.PickValue(pickedCursor(scage))
+      case Adjust.PickValue(cursor) => {
+        CursorConfig.save(cursor)
+        Adjust.Disabled()
+      }
+    }
+    
     def moveCursor(newPos: Vec) = mode match {
       case Adjust.Disabled() => {}
       case Adjust.PickCursor() => cursorPicker.pos = newPos - scage.center
@@ -104,7 +120,7 @@ object Adjust {
     mode match {
       case Adjust.Disabled() => {}
       case Adjust.PickCursor() => {
-        print(s"Pick a side", scage.windowCenter, DARK_GRAY, align = "center")
+        print(s"${pickedCursor(scage).name}", scage.windowCenter, DARK_GRAY, align = "center")
         renderCursor(cursorPicker)
       }
       case Adjust.PickValue(cursor) => {
