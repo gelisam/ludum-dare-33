@@ -17,7 +17,6 @@ object Main
   val timeE = tickE.map(_ / 1000.0)  // in seconds
   val timeB = Behavior.stepper(0.0, timeE)
   
-  val ball = new Ball(this, timeE, timeB)
   Adjust.init(this)
   
   keyIgnorePause(KEY_ESCAPE, onKeyDown = {
@@ -39,7 +38,6 @@ object Main
   }
   
   render {
-    ball.render()
     Adjust.render(this)
     
     if (onPause) {
