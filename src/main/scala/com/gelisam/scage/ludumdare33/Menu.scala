@@ -13,6 +13,9 @@ class Menu {
   val pos = Adjustable[Vec]("menuPos")
   
   def render {
-    sprite.render(Vec(-234, -215) + pos)
+    openglLocalTransform {
+      openglMove(Vec(-234, -215) + pos)
+      sprite.render()
+    }
   }
 }

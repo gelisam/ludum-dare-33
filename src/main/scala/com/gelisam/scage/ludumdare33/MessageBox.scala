@@ -13,6 +13,9 @@ class MessageBox {
   val pos = Adjustable[Vec]("messageBoxPos")
   
   def render {
-    sprite.render(Vec(200, 165) + pos)
+    openglLocalTransform {
+      openglMove(Vec(200, 165) + pos)
+      sprite.render()
+    }
   }
 }

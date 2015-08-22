@@ -12,7 +12,16 @@ class HpBar(monster: Monster, hero: Hero) {
   val sprite = Sprite("hp-bar.png")
   val pos = Adjustable[Vec]("hpBarPos")
   
+  val monsterHpPos = Adjustable[Vec]("monsterHpPos")
+  val heroHpPos = Adjustable[Vec]("heroHpPos")
+  
   def render {
-    sprite.render(Vec(194, -189) + pos)
+    openglLocalTransform {
+      openglMove(Vec(194, -189) + pos)
+      sprite.render()
+      
+      print(s"Monster ${monster.hp} / ${monster.totalHp} HP", Vec(-230, 32) + monsterHpPos, BLACK, align = "center-right")
+      print(s"Hero ${hero.hp} / ${hero.totalHp} HP", Vec(106, 32) + heroHpPos, BLACK, align = "center-right")
+    }
   }
 }

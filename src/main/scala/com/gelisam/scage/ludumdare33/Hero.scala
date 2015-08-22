@@ -10,7 +10,8 @@ class Hero {
   val sprite = Sprite("hero.png", 3)
   val pos = Adjustable[Vec]("heroPos")
   
-  var hp = 100
+  var totalHp = 100
+  var hp = totalHp
   
   def render {
     sprite.render(pos)
