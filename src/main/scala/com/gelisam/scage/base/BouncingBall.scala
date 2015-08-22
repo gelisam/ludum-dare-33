@@ -1,5 +1,6 @@
 package com.gelisam.scage.base
 
+import com.gelisam.scage.adjust._
 import com.gelisam.scage.base._
 import com.gelisam.scage.base.Settings._
 
@@ -17,7 +18,7 @@ object BouncingBall
   val timeB = Behavior.stepper(0.0, timeE)
   
   val ball = new Ball(this, timeE, timeB)
-  Cursor.init(this)
+  Adjust.init(this)
   
   keyIgnorePause(KEY_ESCAPE, onKeyDown = {
     stopApp()
@@ -39,7 +40,7 @@ object BouncingBall
   
   render {
     ball.render()
-    Cursor.render(this)
+    Adjust.render(this)
     
     if (onPause) {
       print(s"PAUSED",        windowCenter, DARK_GRAY, align = "center")
