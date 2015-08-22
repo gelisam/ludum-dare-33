@@ -3,6 +3,8 @@ package com.gelisam.scage.ludumdare33
 import com.gelisam.scage.ludumdare33._
 import com.gelisam.scage.ludumdare33.Settings._
 
+import org.lwjgl.opengl.GL11
+
 import com.gelisam.scage.adjust._
 import com.gelisam.scage.adjust.Predef._
 
@@ -42,6 +44,7 @@ object Main
   val monsterImage = image("monster.png", 200, 175, 0, 0, 40, 35)
   val monsterPos = Adjustable[Vec]("monsterPos")
   render {
+    GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
     drawDisplayList(monsterImage, monsterPos)
     
     Adjust.render(this)
