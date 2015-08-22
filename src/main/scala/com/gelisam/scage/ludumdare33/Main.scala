@@ -1,8 +1,10 @@
 package com.gelisam.scage.ludumdare33
 
-import com.gelisam.scage.adjust._
 import com.gelisam.scage.ludumdare33._
 import com.gelisam.scage.ludumdare33.Settings._
+
+import com.gelisam.scage.adjust._
+import com.gelisam.scage.adjust.Predef._
 
 import com.gelisam.dylemma.frp.Behavior
 
@@ -37,7 +39,11 @@ object Main
     //println(runtime.totalMemory() - runtime.freeMemory())
   }
   
+  val monsterImage = image("monster.png", 200, 175, 0, 0, 40, 35)
+  val monsterPos = Adjustable[Vec]("monsterPos")
   render {
+    drawDisplayList(monsterImage, monsterPos)
+    
     Adjust.render(this)
     
     if (onPause) {
