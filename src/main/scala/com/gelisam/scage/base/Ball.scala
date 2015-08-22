@@ -45,6 +45,7 @@ class Ball(
                      bounceLeftE  ||
                      bounceDownE
   
+  val pixelsPerSecond = Adjustable[Double]("pixelsPerSecond")
   val ballColor = Adjustable[ScageColor]("ballColor")
   def render() {
     drawFilledCircle(ballPosB, ballRadius, ballColor)
