@@ -1,6 +1,6 @@
 package com.gelisam.scage.adjust
 
-import com.gelisam.scage.base.Settings._
+import com.gelisam.scage.adjust.Predef._
 
 import com.gelisam.scage.Sound
 
@@ -56,8 +56,8 @@ object Cursor {
 
 object Adjust {
   val cursorPicker = Cursor("cursorPicker")
-  val cursorA = Cursor("cursorA")
-  val cursorB = Cursor("cursorB")
+  val cursorA = Adjustable[Vec]("cursorA")
+  val cursorB = Adjustable[ScageColor]("cursorB")
   
   sealed trait Mode
   case class Disabled() extends Mode
@@ -108,7 +108,7 @@ object Adjust {
         renderCursor(cursorPicker)
       }
       case Adjust.PickValue(cursor) => {
-        print(s"${cursor.pos}", scage.windowCenter, DARK_GRAY, align = "center")
+        print(s"${cursor}", scage.windowCenter, DARK_GRAY, align = "center")
         renderCursor(cursor)
       }
     }
