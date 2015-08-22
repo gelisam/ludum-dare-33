@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-NAME=bouncing_ball
+NAME=treasure-chest-life
 rm -rf "$NAME" "${NAME}.zip"
 
 sed -i '' -e 's/^os.type = [a-z]*$/os.type = windows/g' build.properties
