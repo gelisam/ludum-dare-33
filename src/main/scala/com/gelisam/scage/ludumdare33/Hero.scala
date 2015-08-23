@@ -15,7 +15,7 @@ class Hero(
   implicit observer: Observer
 ) extends Damageable(100, timeE, timeB) with Attacker {
   def takeTurn(cc: () => Unit) {
-    attack(Main.monster, cc)
+    attack(BattleScreen.monster, cc)
   }
   
   val sprite = Sprite("hero.png", 3)

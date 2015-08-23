@@ -12,8 +12,8 @@ import com.gelisam.dylemma.frp.Behavior
 import com.github.dunnololda.scage.ScageLib._
 import io.dylemma.frp._
 
-object Main
-  extends ScageScreenApp("Treasure Chest Life - Ludum Dare 33", worldSize.ix, worldSize.iy)
+object BattleScreen
+  extends ScageScreen("Battle screen")
   with Observer
 {
   init {
@@ -31,9 +31,6 @@ object Main
   keyIgnorePause(KEY_SPACE, onKeyDown = {
     switchPause()
   })
-  key(KEY_RETURN, onKeyDown = BattleScreen.run)
-  key(KEY_E, onKeyDown = BattleScreen.run)
-  key(KEY_Z, onKeyDown = BattleScreen.run)
 
   action {
     tickE fire msecsFromInitWithoutPause
@@ -46,14 +43,23 @@ object Main
     //println(runtime.totalMemory() - runtime.freeMemory())
   }
   
-  val caveBackgroundSprite = Sprite("cave.png", 4)
-  val caveForegroundSprite = Sprite("cave-fg.png", 4)
+  val fightBackgroundSprite = Sprite("fight-background.png", 4)
+  val fightBackgroundPos = Adjustable[Vec]("fightBackgroundPos")
   
+  val monster = new Monster(timeE, timeB)
+  val hero = new Hero(timeE, timeB)
+  
+  var battle = Battle(monster, hero)
+  val hpBar = new HpBar(monster, hero)
+  val menu = new Menu(this, monster, hero)
   val messageBox = new MessageBox(timeE, timeB)
   
   render {
-    caveBackgroundSprite.render(Vec(192, -16))
-    caveForegroundSprite.render(Vec(192, -16))
+    fightBackgroundSprite.render(Vec(192, -16) + fightBackgroundPos)
+    monster.render
+    hero.render
+    hpBar.render
+    menu.render
     messageBox.render
     
     Adjust.render(this)

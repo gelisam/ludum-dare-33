@@ -20,7 +20,7 @@ class Battle(fighters: Array[Damageable with Attacker]) {
     }
     if (currentFighter.alive) {
       currentFighter.takeTurn(() => nextFighter)
-    } else if (Main.monster.alive) {
+    } else if (BattleScreen.monster.alive) {
       anihilated
     } else {
       hero_wins
@@ -28,15 +28,15 @@ class Battle(fighters: Array[Damageable with Attacker]) {
   }
   
   def anihilated {
-    Main.messageBox.display("anihilated") {() =>
+    BattleScreen.messageBox.display("anihilated") {() =>
       println("anihilated")
     }
   }
   
   def hero_wins {
-    Main.messageBox.display("gained 1000 XP") {() =>
-      Main.messageBox.display("found 0 GP") {() =>
-        Main.messageBox.display("obtained X-Potion") {() =>
+    BattleScreen.messageBox.display("gained 1000 XP") {() =>
+      BattleScreen.messageBox.display("found 0 GP") {() =>
+        BattleScreen.messageBox.display("obtained X-Potion") {() =>
           println("hero wins")
         }
       }
