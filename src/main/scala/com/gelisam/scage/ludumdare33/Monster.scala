@@ -22,7 +22,7 @@ class Monster(
   val attackE = EventSource[Unit]
   val attackHiDuration = Adjustable[Double]("monsterAttackHiDuration")
   val attackLoDuration = Adjustable[Double]("monsterAttackLoDuration")
-  val attackDelay = Adjustable[Double]("monsterAttackDelay")
+  val attackDelay = Adjustable[Double]("attackDelay")
   val attackAnimation: Animation[Sprite] =
     Animation.unit(sprite).during(attackDelay) ++
     Animation.unit(attackingSprite).during(attackHiDuration) ++

@@ -18,9 +18,51 @@ class Hero(
   val pos = Adjustable[Vec]("heroPos")
   
   val attackPower = 10
+  val attackE = EventSource[Unit]
+  val attackDelay = Adjustable[Double]("attackDelay")
+  val lurchForwardDistance = Adjustable[Double]("heroLurchForwardDistance")
+  val lurchForwardDuration = Adjustable[Double]("heroLurchForwardDuration")
+  var lurchForwardAnimation = Animation.math(t =>
+    t / lurchForwardDuration * lurchForwardDistance
+  ).during(lurchForwardDuration)
+  var lurchBackAnimation = Animation.math(t =>
+    (1 - t / lurchForwardDuration) * lurchForwardDistance
+  ).during(lurchForwardDuration)
+  var attackAnimation =
+    lurchForwardAnimation ++
+    lurchBackAnimation ++
+    lurchForwardAnimation ++
+    lurchBackAnimation ++
+    Animation.unit(0.0).during(attackDelay)
+  var animatedOffset =
+    Animated.unit(0.0) ||
+    attackAnimation.runAnimation(attackE, timeE, timeB)
+  
+  var target: Damageable = null
+  animatedOffset.stopE.foreach{_ =>
+    target.takeDamage(attackPower)
+    
+    // tweak the timing at runtime
+    lurchForwardAnimation = Animation.math(t =>
+      t / lurchForwardDuration * lurchForwardDistance
+    ).during(lurchForwardDuration)
+    lurchBackAnimation = Animation.math(t =>
+      (1 - t / lurchForwardDuration) * lurchForwardDistance
+    ).during(lurchForwardDuration)
+    attackAnimation =
+      lurchForwardAnimation ++
+      lurchBackAnimation ++
+      lurchForwardAnimation ++
+      lurchBackAnimation ++
+      Animation.unit(0.0).during(attackDelay)
+    animatedOffset =
+      Animated.unit(0.0) ||
+      attackAnimation.runAnimation(attackE, timeE, timeB)
+  }
   
   def attack(target: Damageable) {
-    target.takeDamage(attackPower)
+    this.target = target
+    attackE fire ()
   }
   
   var totalHp = 100
@@ -39,7 +81,7 @@ class Hero(
   def render {
     openglLocalTransform {
       openglMove(pos)
-      if (!recoil.animatedBlink) sprite.render()
+      if (!recoil.animatedBlink) sprite.render(Vec(-animatedOffset, 0))
       damageDisplay.render(damagePos)
     }
   }
