@@ -22,13 +22,13 @@ class Monster(
   val attackHiDuration = Adjustable[Double]("monsterAttackHiDuration")
   val attackLoDuration = Adjustable[Double]("monsterAttackLoDuration")
   val attackDelay = Adjustable[Double]("monsterAttackDelay")
-  var attackAnimation: Animation[Sprite] =
+  val attackAnimation: Animation[Sprite] =
     Animation.unit(sprite).during(attackDelay) ++
     Animation.unit(attackingSprite).during(attackHiDuration) ++
     Animation.unit(sprite).during(attackLoDuration) ++
     Animation.unit(attackingSprite).during(attackHiDuration) ++
     Animation.unit(sprite).during(attackDelay)
-  var animatedSprite =
+  val animatedSprite =
     Animated.unit(sprite) ||
     attackAnimation.runAnimation(attackE, timeE, timeB)
   
@@ -38,28 +38,28 @@ class Monster(
   val damagePos = Adjustable[Vec]("monsterDamagePos")
   val damageDisplay = new Damage(timeE, timeB)
   
+  var recoilE = EventSource[Unit]
+  var recoilAnimation: Animation[Boolean] =
+    Animation.unit(false).during(0.08) ++
+    Animation.unit(true).during(0.08) ++
+    Animation.unit(false).during(0.08) ++
+    Animation.unit(true).during(0.08) ++
+    Animation.unit(false).during(0.08) ++
+    Animation.unit(true).during(0.08) ++
+    Animation.unit(false).during(0.08)
+  var animatedBlink =
+    Animated.unit(false) ||
+    recoilAnimation.runAnimation(recoilE, timeE, timeB)
+  
   def takeDamage(damage: Int) {
-    attackE fire ()
-    animatedSprite.stopE.foreach{_ =>
-      damageDisplay(s"${damage}")
-      
-      // allows the timing to be changed at runtime
-      attackAnimation =
-        Animation.unit(sprite).during(attackDelay) ++
-        Animation.unit(attackingSprite).during(attackHiDuration) ++
-        Animation.unit(sprite).during(attackLoDuration) ++
-        Animation.unit(attackingSprite).during(attackHiDuration) ++
-        Animation.unit(sprite).during(attackDelay)
-      animatedSprite =
-        Animated.unit(sprite) ||
-        attackAnimation.runAnimation(attackE, timeE, timeB)
-    }
+    recoilE fire ()
+    damageDisplay(s"${damage}")
   }
   
   def render {
     openglLocalTransform {
       openglMove(pos)
-      animatedSprite.render()
+      if (!animatedBlink) animatedSprite.render()
       damageDisplay.render(damagePos)
     }
   }
