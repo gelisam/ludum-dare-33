@@ -22,7 +22,7 @@ class Monster(
   val attackingSprite = Sprite("monster-hi.png", 5)
   val pos = Adjustable[Vec]("monsterPos")
   
-  val attackPower = 80
+  val attackPower = 10
   val attackE = EventSource[Unit]
   val attackHiDuration = Adjustable[Double]("monsterAttackHiDuration")
   val attackLoDuration = Adjustable[Double]("monsterAttackLoDuration")

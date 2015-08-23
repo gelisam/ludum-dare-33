@@ -21,7 +21,7 @@ class Hero(
   val sprite = Sprite("hero.png", 3)
   val pos = Adjustable[Vec]("heroPos")
   
-  val attackPower = 10
+  val attackPower = 1000
   val attackE = EventSource[Unit]
   val attackDelay = Adjustable[Double]("attackDelay")
   val lurchForwardDistance = Adjustable[Double]("heroLurchForwardDistance")

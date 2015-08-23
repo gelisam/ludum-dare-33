@@ -33,7 +33,11 @@ class Battle(fighters: Array[Damageable with Attacker]) {
   
   def hero_wins {
     Main.messageBox.display("gained 1000 XP") {() =>
-      println("hero wins")
+      Main.messageBox.display("found 0 GP") {() =>
+        Main.messageBox.display("obtained X-Potion") {() =>
+          println("hero wins")
+        }
+      }
     }
   }
 }
