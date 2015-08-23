@@ -73,10 +73,12 @@ object Main
   
   val heroWalkSpeed = Vec(-128, 0)
   val heroWalkDuration = 2.0
+  val heroStandPos = heroWalkDuration * heroWalkSpeed
   val walkAnimation: Animation[Vec] =
     Animation.math(t => t * heroWalkSpeed).during(heroWalkDuration) ++
-    Animation.unit(heroWalkDuration * heroWalkSpeed)
+    Animation.unit(heroStandPos)
   val animatedHeroPos: Animated[Vec] =
+    Animated.unit(Vec(0,0)) ||
     walkAnimation.runAnimation(startWalkingE, timeE, timeB)
   
   val heroSprite = Sprite("hero.png", 4)
