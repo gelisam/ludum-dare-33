@@ -44,11 +44,9 @@ case class Animated[A](
     val whichB: Behavior[Boolean] =
       Behavior.stepper(false, startE.map(_ => false)
                       || that.startE.map(_ => true))
-    val realValueB: Behavior[A] = (valueB map2 that.valueB) {(a,b) =>
-      whichB.map {
-        case false => a
-        case true => b
-      }
+    val realValueB: Behavior[A] = (valueB map2 that.valueB)((_,_)).map2(whichB) {
+      case ((a,b),false) => a
+      case ((a,b),true) => b
     }
     val reallyStopsE = stopE.filter(_ => whichB.value == false) ||
                   that.stopE.filter(_ => whichB.value == true)
