@@ -1,7 +1,7 @@
 Treasure Chest Life - Ludum Dare 33
 ===
 
-![Concept art for the game: a hero fights a monster, but the menu of commands is on the side of the monster.](media/concept-art.png)
+![Concept art for the game: a hero fights a monster, but the menu of commands is on the side of the monster.](concept-art.png)
 
 In progress.
 
