@@ -51,7 +51,7 @@ case class Animated[A](
     val reallyStopsE = stopE.filter(_ => whichB.value == false) ||
                   that.stopE.filter(_ => whichB.value == true)
     
-    Animated(startE, realValueB, reallyStopsE)
+    Animated(eitherStartE, realValueB, reallyStopsE)
   }
 }
 
