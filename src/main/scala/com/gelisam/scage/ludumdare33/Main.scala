@@ -3,6 +3,7 @@ package com.gelisam.scage.ludumdare33
 import com.gelisam.scage.ludumdare33._
 import com.gelisam.scage.ludumdare33.Settings._
 
+import com.gelisam.dylemma.frp._
 import com.gelisam.scage.adjust._
 import com.gelisam.scage.adjust.Predef._
 import com.gelisam.scage.Sprite
@@ -31,9 +32,9 @@ object Main
   keyIgnorePause(KEY_SPACE, onKeyDown = {
     switchPause()
   })
-  key(KEY_RETURN, onKeyDown = BattleScreen.run)
-  key(KEY_E, onKeyDown = BattleScreen.run)
-  key(KEY_Z, onKeyDown = BattleScreen.run)
+  key(KEY_RETURN, onKeyDown = playIntro)
+  key(KEY_E, onKeyDown = playIntro)
+  key(KEY_Z, onKeyDown = playIntro)
 
   action {
     tickE fire msecsFromInitWithoutPause
@@ -57,6 +58,27 @@ object Main
   val titleSprite = Sprite("title.png", 3)
   val titlePos = Adjustable[Vec]("titlePos")
   
+  val startWalkingE = EventSource[Unit]
+  
+  val heroWalkSprites = Array(Sprite("hero-walk1.png", 4), Sprite("hero-walk2.png", 4))
+  val heroWalkCycle = 0.1
+  val walkCycleAnimation: Animation[Sprite] = Animation.math {t =>
+    val period = heroWalkSprites.length * heroWalkCycle
+    val index = ((t % period) / heroWalkCycle).toInt
+    val adjustedIndex = Adjust.limit(0, index, heroWalkSprites.length - 1)
+    heroWalkSprites(adjustedIndex)
+  }
+  val animatedWalkSprite: Animated[Sprite] =
+    walkCycleAnimation.runAnimation(startWalkingE, timeE, timeB)
+  
+  val heroWalkSpeed = Vec(-128, 0)
+  val heroWalkDuration = 2.0
+  val walkAnimation: Animation[Vec] =
+    Animation.math(t => t * heroWalkSpeed).during(heroWalkDuration) ++
+    Animation.unit(heroWalkDuration * heroWalkSpeed)
+  val animatedHeroPos: Animated[Vec] =
+    walkAnimation.runAnimation(startWalkingE, timeE, timeB)
+  
   val heroSprite = Sprite("hero.png", 4)
   val heroPos = Adjustable[Vec]("caveHeroPos")
   
@@ -64,10 +86,16 @@ object Main
   val openBoxSprite = Sprite("open-box.png", 2)
   val boxPos = Adjustable[Vec]("treasureChestPos")
   
+  def playIntro {
+    startWalkingE fire ()
+  }
+  
   render {
     caveBackgroundSprite.render(Vec(192, -16))
     closedBoxSprite.render(boxPos)
-    heroSprite.render(heroPos)
+    if (animatedHeroPos.activeB) {
+      animatedWalkSprite.render(heroPos.value + animatedHeroPos.valueB.value)
+    }
     caveForegroundSprite.render(Vec(192, -16))
     darkerSprite.render(darkerPos)
     titleSprite.render(Vec(192, 0) + titlePos)
