@@ -51,9 +51,17 @@ object Main
   
   val messageBox = new MessageBox(timeE, timeB)
   
+  val darkerSprite = Sprite("darker.png", 32)
+  val darkerPos = Adjustable[Vec]("darkerPos")
+  
+  val titleSprite = Sprite("title.png", 3)
+  val titlePos = Adjustable[Vec]("titlePos")
+  
   render {
     caveBackgroundSprite.render(Vec(192, -16))
     caveForegroundSprite.render(Vec(192, -16))
+    darkerSprite.render(darkerPos)
+    titleSprite.render(Vec(192, 0) + titlePos)
     messageBox.render
     
     Adjust.render(this)
