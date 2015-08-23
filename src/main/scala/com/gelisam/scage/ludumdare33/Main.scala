@@ -75,14 +75,17 @@ object Main
   val heroWalkDuration = 2.0
   val heroStandPos = heroWalkDuration * heroWalkSpeed
   val walkAnimation: Animation[Vec] =
-    Animation.math(t => t * heroWalkSpeed).during(heroWalkDuration) ++
-    Animation.unit(heroStandPos)
-  val animatedHeroPos: Animated[Vec] =
+    Animation.math(t => t * heroWalkSpeed).during(heroWalkDuration)
+  val animatedWalkingHeroPos: Animated[Vec] =
     Animated.unit(Vec(0,0)) ||
     walkAnimation.runAnimation(startWalkingE, timeE, timeB)
   
   val heroSprite = Sprite("hero.png", 4)
   val heroPos = Adjustable[Vec]("caveHeroPos")
+  val standingAnimation: Animation[Vec] =
+    Animation.unit(heroStandPos).during(0.5)
+  val animatedStandingHeroPos: Animated[Vec] =
+    standingAnimation.runAnimation(animatedWalkingHeroPos.stopE, timeE, timeB)
   
   val closedBoxSprite = Sprite("closed-box.png", 2)
   val openBoxSprite = Sprite("open-box.png", 2)
@@ -97,8 +100,12 @@ object Main
   render {
     caveBackgroundSprite.render(Vec(192, -16))
     closedBoxSprite.render(boxPos)
-    if (animatedHeroPos.activeB) {
-      animatedWalkSprite.render(heroPos.value + animatedHeroPos.valueB.value)
+    if (playingIntro) {
+      if (animatedWalkingHeroPos.activeB) {
+        animatedWalkSprite.render(heroPos.value + animatedWalkingHeroPos.valueB.value)
+      } else {
+        heroSprite.render(heroPos.value + animatedStandingHeroPos.valueB.value)
+      }
     }
     caveForegroundSprite.render(Vec(192, -16))
     if (!playingIntro) {
