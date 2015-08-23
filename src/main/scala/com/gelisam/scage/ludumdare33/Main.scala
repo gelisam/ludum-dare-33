@@ -86,7 +86,9 @@ object Main
   val openBoxSprite = Sprite("open-box.png", 2)
   val boxPos = Adjustable[Vec]("treasureChestPos")
   
+  var playingIntro = false
   def playIntro {
+    playingIntro = true
     startWalkingE fire ()
   }
   
@@ -97,8 +99,10 @@ object Main
       animatedWalkSprite.render(heroPos.value + animatedHeroPos.valueB.value)
     }
     caveForegroundSprite.render(Vec(192, -16))
-    darkerSprite.render(darkerPos)
-    titleSprite.render(Vec(192, 0) + titlePos)
+    if (!playingIntro) {
+      darkerSprite.render(darkerPos)
+      titleSprite.render(Vec(192, 0) + titlePos)
+    }
     messageBox.render
     
     Adjust.render(this)
