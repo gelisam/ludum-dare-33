@@ -52,7 +52,7 @@ object Main
   var battle = Battle(monster, hero)
   val hpBar = new HpBar(monster, hero)
   val menu = new Menu(this, monster, hero)
-  val messageBox = new MessageBox
+  val messageBox = new MessageBox(timeE, timeB)
   
   render {
     fightBackgroundSprite.render(Vec(192, -16) + fightBackgroundPos)

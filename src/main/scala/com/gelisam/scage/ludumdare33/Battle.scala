@@ -26,11 +26,15 @@ class Battle(fighters: Array[Damageable with Attacker]) {
   }
   
   def anihilated {
-    println("anihilated")
+    Main.messageBox.display("anihilated") {() =>
+      println("anihilated")
+    }
   }
   
   def hero_wins {
-    println("hero wins")
+    Main.messageBox.display("gained 1000 XP") {() =>
+      println("hero wins")
+    }
   }
 }
 
