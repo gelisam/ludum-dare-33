@@ -29,7 +29,8 @@ class Battle(fighters: Array[Damageable with Attacker]) {
   
   def anihilated {
     BattleScreen.messageBox.display("anihilated") {() =>
-      println("anihilated")
+      Main.playIntermission
+      BattleScreen.stop
     }
   }
   

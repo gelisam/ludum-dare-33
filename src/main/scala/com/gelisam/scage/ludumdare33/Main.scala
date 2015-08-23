@@ -68,7 +68,7 @@ object Main
   val titleSprite = Sprite("title.png", 3)
   val titlePos = Adjustable[Vec]("titlePos")
   
-  val startWalkingE = EventSource[Unit]
+  val playIntroE = EventSource[Unit]
   
   val heroWalkSprites = Array(Sprite("hero-walk1.png", 4), Sprite("hero-walk2.png", 4))
   val heroWalkCycle = 0.1
@@ -79,7 +79,7 @@ object Main
     heroWalkSprites(adjustedIndex)
   }
   val animatedWalkSprite: Animated[Sprite] =
-    walkCycleAnimation.runAnimation(startWalkingE, timeE, timeB)
+    walkCycleAnimation.runAnimation(playIntroE, timeE, timeB)
   
   val heroWalkSpeed = Vec(-128, 0)
   val heroWalkDuration = 2.0
@@ -88,7 +88,7 @@ object Main
     Animation.math(t => t * heroWalkSpeed).during(heroWalkDuration)
   val animatedWalkingHeroPos: Animated[Vec] =
     Animation.unit(Vec(0,0)).runAnimation(resetE, timeE, timeB) ||
-    walkAnimation.runAnimation(startWalkingE, timeE, timeB)
+    walkAnimation.runAnimation(playIntroE, timeE, timeB)
   
   val heroSprite = Sprite("hero.png", 4)
   val heroPos = Adjustable[Vec]("caveHeroPos")
@@ -100,8 +100,8 @@ object Main
   val closedBoxSprite = Sprite("closed-box.png", 2)
   val openBoxSprite = Sprite("open-box.png", 2)
   val boxPos = Adjustable[Vec]("treasureChestPos")
-  val animatedBoxSprite: Animated[Sprite] =
-    Animation.unit(closedBoxSprite).runAnimation(resetE, timeE, timeB) ||
+  lazy val animatedBoxSprite: Animated[Sprite] =
+    Animation.unit(closedBoxSprite).runAnimation(resetE || playIntermissionE, timeE, timeB) ||
     Animation.unit(openBoxSprite).runAnimation(animatedStandingHeroPos.stopE, timeE, timeB)
   
   animatedStandingHeroPos.stopE.foreach {_ =>
@@ -132,25 +132,52 @@ object Main
     Animation.unit(0.0).runAnimation(resetE, timeE, timeB) ||
     zoomEffectAnimation.runAnimation(animatedStandingHeroPos.stopE, timeE, timeB)
   
-  val blackScreenDuration = 0.15
-  val animatedBlackScreen: Animated[Boolean] =
+  val introBlackScreenDuration = 0.25
+  val animatedIntroBlackScreen: Animated[Boolean] =
     Animation.unit(false).runAnimation(resetE, timeE, timeB) ||
-    Animation.unit(true).during(blackScreenDuration).runAnimation(animatedZoom.stopE, timeE, timeB)
+    Animation.unit(true).during(introBlackScreenDuration).runAnimation(animatedZoom.stopE, timeE, timeB)
   
-  animatedBlackScreen.stopE.foreach {_ =>
+  animatedIntroBlackScreen.stopE.foreach {_ =>
+    pause
     BattleScreen.run
   }
   
   var playingIntro = false
   def playIntro {
-    println("playingIntro")
     playingIntro = true
-    startWalkingE fire ()
+    playIntroE fire ()
   }
+  
+  
+  val playIntermissionE = EventSource[Unit]
+  
+  val intermissionBlackScreenDuration = 0.5
+  val intermissionBlackScrenAnimation: Animation[Boolean] =
+    Animation.unit(true).during(intermissionBlackScreenDuration)
+  val animatedIntermissionBlackScreen: Animated[Boolean] =
+    Animation.unit(false).runAnimation(resetE, timeE, timeB) ||
+    intermissionBlackScrenAnimation.runAnimation(playIntermissionE, timeE, timeB)
+  
+  animatedIntermissionBlackScreen.stopE.foreach {_ =>
+    println("I guess I need to grind more levels...")
+  }
+  
+  def playIntermission {
+    pauseOff
+    playIntermissionE fire ()
+  }
+  
+  def animatedBlackScreen: Boolean =
+    animatedIntroBlackScreen.activeB ||
+    animatedIntermissionBlackScreen.activeB
   
   render {
     if (!animatedBlackScreen) {
-      globalScale = 1 + animatedZoom.toFloat
+      if (animatedZoom.activeB) {
+        globalScale = 1 + animatedZoom.toFloat
+      } else {
+        globalScale = 1
+      }
       caveBackgroundSprite.render(Vec(192, -16))
       animatedBoxSprite.render(boxPos)
       if (playingIntro) {
