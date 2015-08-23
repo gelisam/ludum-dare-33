@@ -22,6 +22,12 @@ object Main
     Sprite.init(this)
   }
   
+  val resetE = EventSource[Unit]
+  def reset {
+    playingIntro = false
+    resetE fire ()
+  }
+  
   val tickE = EventSource[Long]      // in milliseconds
   val timeE = tickE.map(_ / 1000.0)  // in seconds
   val timeB = Behavior.stepper(0.0, timeE)
@@ -77,7 +83,7 @@ object Main
   val walkAnimation: Animation[Vec] =
     Animation.math(t => t * heroWalkSpeed).during(heroWalkDuration)
   val animatedWalkingHeroPos: Animated[Vec] =
-    Animated.unit(Vec(0,0)) ||
+    Animation.unit(Vec(0,0)).runAnimation(resetE, timeE, timeB) ||
     walkAnimation.runAnimation(startWalkingE, timeE, timeB)
   
   val heroSprite = Sprite("hero.png", 4)
@@ -91,7 +97,7 @@ object Main
   val openBoxSprite = Sprite("open-box.png", 2)
   val boxPos = Adjustable[Vec]("treasureChestPos")
   val animatedBoxSprite: Animated[Sprite] =
-    Animated.unit(closedBoxSprite) ||
+    Animation.unit(closedBoxSprite).runAnimation(resetE, timeE, timeB) ||
     Animation.unit(openBoxSprite).runAnimation(animatedStandingHeroPos.stopE, timeE, timeB)
   
   animatedStandingHeroPos.stopE.foreach {_ =>
@@ -119,12 +125,12 @@ object Main
     }
   ).during(zoomEffectDelay + 3*zoomEffectDuration)
   val animatedZoom =
-    Animated.unit(0.0) ||
+    Animation.unit(0.0).runAnimation(resetE, timeE, timeB) ||
     zoomEffectAnimation.runAnimation(animatedStandingHeroPos.stopE, timeE, timeB)
   
   val blackScreenDuration = 0.15
   val animatedBlackScreen: Animated[Boolean] =
-    Animated.unit(false) ||
+    Animation.unit(false).runAnimation(resetE, timeE, timeB) ||
     Animation.unit(true).during(blackScreenDuration).runAnimation(animatedZoom.stopE, timeE, timeB)
   
   animatedBlackScreen.stopE.foreach {_ =>
@@ -139,9 +145,7 @@ object Main
   
   render {
     if (!animatedBlackScreen) {
-      if (animatedZoom.activeB) {
-        globalScale = 1 + animatedZoom.toFloat
-      }
+      globalScale = 1 + animatedZoom.toFloat
       caveBackgroundSprite.render(Vec(192, -16))
       animatedBoxSprite.render(boxPos)
       if (playingIntro) {

@@ -26,6 +26,7 @@ object BattleScreen
   val timeB = Behavior.stepper(0.0, timeE)
   
   keyIgnorePause(KEY_ESCAPE, onKeyDown = {
+    Main.reset
     stop()
   })
   keyIgnorePause(KEY_SPACE, onKeyDown = {
