@@ -13,7 +13,7 @@ class Hero(
   timeB: Behavior[Double]
 )(
   implicit observer: Observer
-) extends Damageable(100) with Attacker {
+) extends Damageable(100, timeE, timeB) with Attacker {
   def takeTurn(cc: () => Unit) {
     attack(Main.monster, cc)
   }
@@ -61,15 +61,6 @@ class Hero(
   }
   
   val damagePos = Adjustable[Vec]("heroDamagePos")
-  val damageDisplay = new Damage(timeE, timeB)
-  
-  var recoil = new Recoil(timeE, timeB)
-  
-  override def takeDamage(damage: Int, cc: () => Unit) {
-    super.takeDamage(damage, cc)
-    recoil()
-    damageDisplay(s"${damage}", cc)
-  }
   
   def render {
     openglLocalTransform {

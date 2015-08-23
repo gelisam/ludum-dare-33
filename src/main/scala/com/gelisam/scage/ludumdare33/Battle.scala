@@ -8,8 +8,10 @@ class Battle(fighters: Array[Damageable with Attacker]) {
   def currentFighter: Damageable with Attacker =
     fighters(currentIndex)
   
-  def begin =
+  def begin {
+    fighters.foreach(_.reset)
     currentFighter.takeTurn(() => nextFighter)
+  }
   
   def nextFighter {
     currentIndex += 1
