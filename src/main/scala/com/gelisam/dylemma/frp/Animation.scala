@@ -109,11 +109,9 @@ trait Animation[A] {
       val whichB: Behavior[Boolean] =
         Behavior.stepper(false, startE.map(_ => false)
                              || animatedA.stopE.map(_ => true))
-      val realValueB: Behavior[A] = (animatedA.valueB map2 animatedB.valueB) {(a,b) =>
-        whichB.value match {
-          case false => a
-          case true => b
-        }
+      val realValueB: Behavior[A] = (animatedA.valueB map2 animatedB.valueB)((_,_)).map2(whichB) {
+        case ((a,b),false) => a
+        case ((a,b),true) => b
       }
       val reallyStopsE =
         animatedB.stopE.filter(_ => whichB.value == true)
