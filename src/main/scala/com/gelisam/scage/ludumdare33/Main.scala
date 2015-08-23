@@ -46,11 +46,11 @@ object Main
   val fightBackgroundSprite = Sprite("fight-background.png", 4)
   val fightBackgroundPos = Adjustable[Vec]("fightBackgroundPos")
   
-  val monster = new Monster
+  val monster = new Monster(timeE, timeB)
   val hero = new Hero(timeE, timeB)
   
   val hpBar = new HpBar(monster, hero)
-  val menu = new Menu(this, hero)
+  val menu = new Menu(this, monster)
   val messageBox = new MessageBox
   
   render {

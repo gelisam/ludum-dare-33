@@ -11,7 +11,7 @@ import com.github.dunnololda.scage.ScageLib._
 
 class Menu(
   scage: ScageController,
-  hero: Hero
+  target: Damageable
 ) {
   val sprite = Sprite("menu.png")
   val pos = Adjustable[Vec]("menuPos")
@@ -39,7 +39,7 @@ class Menu(
     println(cmd)
     
     if (cmd == "Fight") {
-      hero.takeDamage()
+      target.takeDamage(10)
     }
   }
   

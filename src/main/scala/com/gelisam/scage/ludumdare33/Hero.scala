@@ -13,7 +13,7 @@ class Hero(
   timeB: Behavior[Double]
 )(
   implicit observer: Observer
-) {
+) extends Damageable {
   val sprite = Sprite("hero.png", 3)
   val pos = Adjustable[Vec]("heroPos")
   
@@ -21,17 +21,17 @@ class Hero(
   var hp = totalHp
   
   val damagePos = Adjustable[Vec]("heroDamagePos")
-  val damage = new Damage(timeE, timeB)
+  val damageDisplay = new Damage(timeE, timeB)
   
-  def takeDamage() {
-    damage("10")
+  def takeDamage(damage: Int) {
+    damageDisplay(s"${damage}")
   }
   
   def render {
     openglLocalTransform {
       openglMove(pos)
       sprite.render()
-      damage.render(damagePos)
+      damageDisplay.render(damagePos)
     }
   }
 }
