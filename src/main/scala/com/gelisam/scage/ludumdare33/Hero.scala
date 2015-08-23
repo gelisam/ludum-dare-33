@@ -64,7 +64,11 @@ class Hero(
   def render {
     openglLocalTransform {
       openglMove(pos)
-      if (!recoil.animatedBlink) sprite.render(Vec(-animatedOffset, 0))
+      if (!recoil.animatedBlink) {
+        // hack to work around bugs in my animation library
+        val adjustedOffset = Adjust.limit(0, animatedOffset, lurchForwardDistance)
+        sprite.render(Vec(-adjustedOffset, 0))
+      }
       damageDisplay.render(damagePos)
     }
   }

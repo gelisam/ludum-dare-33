@@ -47,13 +47,7 @@ object Cursor {
   private val cursorMap = Map[String,Cursor]()
   
   def fromFrac(frac: Double): Cursor = {
-    def limit(lo: Int, x: Int, hi: Int): Int
-      = Math.min(
-        Math.max(lo, x),
-        hi
-      )
-    
-    val i = limit(0, (frac * cursorArray.size).toInt, cursorArray.size - 1)
+    val i = Adjust.limit(0, (frac * cursorArray.size).toInt, cursorArray.size - 1)
     cursorArray(i)
   }
   
@@ -74,6 +68,27 @@ object Cursor {
 }
 
 object Adjust {
+  def limit(lo: Double, x: Double, hi: Double): Double
+    = Math.min(
+      Math.max(lo, x),
+      hi
+    )
+  def limit(lo: Float, x: Float, hi: Float): Float
+    = Math.min(
+      Math.max(lo, x),
+      hi
+    )
+  def limit(lo: Long, x: Long, hi: Long): Long
+    = Math.min(
+      Math.max(lo, x),
+      hi
+    )
+  def limit(lo: Int, x: Int, hi: Int): Int
+    = Math.min(
+      Math.max(lo, x),
+      hi
+    )
+  
   val cursorPicker = Cursor("cursorPicker")
   
   def pickedCursor(scage: Renderer): Cursor = {
