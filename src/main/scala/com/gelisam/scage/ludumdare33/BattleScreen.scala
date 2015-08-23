@@ -33,8 +33,9 @@ object BattleScreen
     switchPause()
   })
 
-  var timeMultiplier: Long = 1
-  key(KEY_N, onKeyDown = {timeMultiplier = 4}, onKeyUp = {timeMultiplier = 1})
+  def timeMultiplier: Long =
+    if (keyPressed(KEY_N)) 4
+    else 1
 
   action {
     tickE fire (msecsFromInitWithoutPause * timeMultiplier)
