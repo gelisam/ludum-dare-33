@@ -18,9 +18,19 @@ class Battle(fighters: Array[Damageable with Attacker]) {
     }
     if (currentFighter.alive) {
       currentFighter.takeTurn(() => nextFighter)
+    } else if (Main.monster.alive) {
+      anihilated
     } else {
-      nextFighter
+      hero_wins
     }
+  }
+  
+  def anihilated {
+    println("anihilated")
+  }
+  
+  def hero_wins {
+    println("hero wins")
   }
 }
 
