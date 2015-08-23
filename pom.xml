@@ -70,12 +70,6 @@
     </dependency>
     
     <dependency>
-        <groupId>com.github.dylemma</groupId>
-        <artifactId>scala.frp</artifactId>
-        <version>3ca4c4cf7f0a207d7fc8245b33d48c04a3a2d7f9</version>
-    </dependency>
-    
-    <dependency>
         <groupId>org.streum</groupId>
         <artifactId>configrity-core_2.10</artifactId>
         <version>1.0.0</version>
