@@ -2,7 +2,7 @@ package io.dylemma.frp
 
 import impl._
 import java.util.concurrent.atomic.AtomicBoolean
-import collection.parallel.mutable.ParHashSet
+import collection.mutable.HashSet
 import java.lang.ref.WeakReference
 
 object EventSource {
@@ -39,7 +39,7 @@ trait EventSource[A] extends EventStream[A] with EventSourceImpl[A] {
 	  */
 	protected def purgeThreshold: Int = 5
 
-	private var refs = new ParHashSet[WeakReference[Event[A] => Boolean]]
+	private var refs = new HashSet[WeakReference[Event[A] => Boolean]]
 
 	private[frp] def addHandler(handler: Event[A] => Boolean): Unit = {
 		refs += new WeakReference(handler)
