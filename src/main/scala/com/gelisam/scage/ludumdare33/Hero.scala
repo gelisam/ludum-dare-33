@@ -20,36 +20,18 @@ class Hero(
   var totalHp = 100
   var hp = totalHp
   
-  val damageBounceHeight = Adjustable[Double]("damageBounceHeight")
-  val damageBounceSpeed = Adjustable[Double]("damageBounceSpeed")
-  val damageBounceDuration = Adjustable[Double]("damageBounceDuration")
-  val damageBounce = Animation.math {t =>
-    val x = (t/damageBounceDuration - damageBounceSpeed) / (1 - damageBounceSpeed)
-    damageBounceHeight.value * (1 - Math.pow(x, 2))
-  }.during(damageBounceDuration)
-  
-  val damageStayDuration = Adjustable[Double]("damageStayDuration")
-  val damageStay = Animation.unit(0.0).during(damageStayDuration)
-  
-  val damageAnimation = damageBounce ++ damageStay
-  
   val damagePos = Adjustable[Vec]("heroDamagePos")
-  val startDamageE = EventSource[Unit]
-  val damageOffset =
-    damageAnimation.runAnimation(startDamageE, timeE, timeB)
+  val damage = new Damage(timeE, timeB)
   
   def takeDamage() {
-    startDamageE fire ()
+    damage("10")
   }
   
   def render {
     openglLocalTransform {
       openglMove(pos)
       sprite.render()
-      
-      if (damageOffset.activeB) {
-        print("10", damagePos.value + Vec(0, damageOffset), WHITE, align = "center")
-      }
+      damage.render(damagePos)
     }
   }
 }
