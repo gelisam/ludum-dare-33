@@ -65,7 +65,8 @@ object BattleScreen
     Adjust.render(this)
     
     if (onPause) {
-      print(s"PAUSED",        windowCenter, DARK_GRAY, align = "center")
+      Main.darkerSprite.render(Main.darkerPos)
+      print(s"PAUSED", Vec(0,0), DARK_GRAY, align = "center")
     }
   }
 }

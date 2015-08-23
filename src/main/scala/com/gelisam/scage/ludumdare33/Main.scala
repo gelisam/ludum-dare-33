@@ -104,7 +104,8 @@ object Main
     Adjust.render(this)
     
     if (onPause) {
-      print(s"PAUSED",        windowCenter, DARK_GRAY, align = "center")
+      darkerSprite.render(darkerPos)
+      print(s"PAUSED", Vec(0,0), DARK_GRAY, align = "center")
     }
   }
 }
