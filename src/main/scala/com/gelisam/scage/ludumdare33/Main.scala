@@ -90,6 +90,15 @@ object Main
   val closedBoxSprite = Sprite("closed-box.png", 2)
   val openBoxSprite = Sprite("open-box.png", 2)
   val boxPos = Adjustable[Vec]("treasureChestPos")
+  val animatedBoxSprite: Animated[Sprite] =
+    Animated.unit(closedBoxSprite) ||
+    Animation.unit(openBoxSprite).runAnimation(animatedStandingHeroPos.stopE, timeE, timeB)
+  
+  animatedStandingHeroPos.stopE.foreach {_ =>
+    messageBox.display("Monster-in-a-box!") {() =>
+      BattleScreen.run
+    }
+  }
   
   var playingIntro = false
   def playIntro {
@@ -99,7 +108,7 @@ object Main
   
   render {
     caveBackgroundSprite.render(Vec(192, -16))
-    closedBoxSprite.render(boxPos)
+    animatedBoxSprite.render(boxPos)
     if (playingIntro) {
       if (animatedWalkingHeroPos.activeB) {
         animatedWalkSprite.render(heroPos.value + animatedWalkingHeroPos.valueB.value)
