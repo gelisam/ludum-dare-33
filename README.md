@@ -1,7 +1,10 @@
 Treasure Chest Life - Ludum Dare 33
 ===
 
-![Concept art for the game: a hero fights a monster, but the menu of commands is on the side of the monster.](concept-art.png)
+Screenshots:
+
+![Screenshot of a the hero opening a chest. A message says: "Monster-in-a-box!"](monsterinabox-screenshot.png)  
+![Screenshot of a standard RPG-style fight between a hero fights a monster, but the menu of commands is on the side of the monster.](fight-screenshot.png)
 
 In progress.
 
