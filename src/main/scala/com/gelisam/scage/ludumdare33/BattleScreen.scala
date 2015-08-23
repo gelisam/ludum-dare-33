@@ -33,8 +33,11 @@ object BattleScreen
     switchPause()
   })
 
+  var timeMultiplier: Long = 1
+  key(KEY_N, onKeyDown = {timeMultiplier = 4}, onKeyUp = {timeMultiplier = 1})
+
   action {
-    tickE fire msecsFromInitWithoutPause
+    tickE fire (msecsFromInitWithoutPause * timeMultiplier)
     Behavior.updateBehaviors
     
     // Check for memory leaks. Enabling this will make the game super slow, but if there are

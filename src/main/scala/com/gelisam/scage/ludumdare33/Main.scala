@@ -41,9 +41,12 @@ object Main
   key(KEY_RETURN, onKeyDown = playIntro)
   key(KEY_E, onKeyDown = playIntro)
   key(KEY_Z, onKeyDown = playIntro)
+  
+  var timeMultiplier: Long = 1
+  key(KEY_N, onKeyDown = {timeMultiplier = 4}, onKeyUp = {timeMultiplier = 1})
 
   action {
-    tickE fire msecsFromInitWithoutPause
+    tickE fire (msecsFromInitWithoutPause * timeMultiplier)
     Behavior.updateBehaviors
     
     // Check for memory leaks. Enabling this will make the game super slow, but if there are
@@ -139,6 +142,7 @@ object Main
   
   var playingIntro = false
   def playIntro {
+    println("playingIntro")
     playingIntro = true
     startWalkingE fire ()
   }
