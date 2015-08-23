@@ -47,10 +47,10 @@ object Main
   val fightBackgroundPos = Adjustable[Vec]("fightBackgroundPos")
   
   val monster = new Monster
-  val hero = new Hero
+  val hero = new Hero(timeE, timeB)
   
   val hpBar = new HpBar(monster, hero)
-  val menu = new Menu(this)
+  val menu = new Menu(this, hero)
   val messageBox = new MessageBox
   
   render {

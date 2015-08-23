@@ -9,7 +9,10 @@ import com.gelisam.scage.Sprite
 import com.github.dunnololda.scage.handlers.controller2.ScageController
 import com.github.dunnololda.scage.ScageLib._
 
-class Menu(scage: ScageController) {
+class Menu(
+  scage: ScageController,
+  hero: Hero
+) {
   val sprite = Sprite("menu.png")
   val pos = Adjustable[Vec]("menuPos")
   
@@ -34,6 +37,10 @@ class Menu(scage: ScageController) {
   def select {
     val cmd = cmdArray(pointer)
     println(cmd)
+    
+    if (cmd == "Fight") {
+      hero.takeDamage()
+    }
   }
   
   scage.key(KEY_DOWN, onKeyDown = incr)
