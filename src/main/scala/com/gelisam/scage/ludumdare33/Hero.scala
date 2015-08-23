@@ -14,6 +14,10 @@ class Hero(
 )(
   implicit observer: Observer
 ) extends Damageable(100) with Attacker {
+  def takeTurn(cc: () => Unit) {
+    attack(Main.monster, cc)
+  }
+  
   val sprite = Sprite("hero.png", 3)
   val pos = Adjustable[Vec]("heroPos")
   
@@ -44,13 +48,15 @@ class Hero(
     Animated.unit(0.0) ||
     attackAnimation.runAnimation(attackE, timeE, timeB)
   
-  var target: Damageable = null
+  var afterAttacking: () => Unit = null
   animatedOffset.stopE.foreach{_ =>
-    target.takeDamage(attackPower)
+    afterAttacking()
   }
   
-  def attack(target: Damageable) {
-    this.target = target
+  def attack(target: Damageable, cc: () => Unit) {
+    afterAttacking = {() =>
+      target.takeDamage(attackPower, cc)
+    }
     attackE fire ()
   }
   
@@ -59,10 +65,10 @@ class Hero(
   
   var recoil = new Recoil(timeE, timeB)
   
-  override def takeDamage(damage: Int) {
-    super.takeDamage(damage)
+  override def takeDamage(damage: Int, cc: () => Unit) {
+    super.takeDamage(damage, cc)
     recoil()
-    damageDisplay(s"${damage}")
+    damageDisplay(s"${damage}", cc)
   }
   
   def render {

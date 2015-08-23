@@ -49,8 +49,9 @@ object Main
   val monster = new Monster(timeE, timeB)
   val hero = new Hero(timeE, timeB)
   
+  var battle = Battle(monster, hero)
   val hpBar = new HpBar(monster, hero)
-  val menu = new Menu(this, hero, monster)
+  val menu = new Menu(this, monster, hero)
   val messageBox = new MessageBox
   
   render {

@@ -40,7 +40,8 @@ class Menu(
     println(cmd)
     
     if (cmd == "Fight") {
-      attacker.attack(target)
+      Main.battle.begin
+      //attacker.attack(target)
     }
   }
   

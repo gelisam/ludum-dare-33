@@ -31,10 +31,15 @@ class Damage(
   val damageOffset =
     damageAnimation.runAnimation(startDamageE, timeE, timeB)
   
-  var damageText = ""
+  var afterAnimating: () => Unit = null
+  damageOffset.stopE.foreach{_ =>
+    afterAnimating()
+  }
   
-  def apply(text: String) {
+  var damageText = ""
+  def apply(text: String, cc: () => Unit) {
     damageText = text
+    afterAnimating = cc
     startDamageE fire ()
   }
   
