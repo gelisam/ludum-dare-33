@@ -95,9 +95,40 @@ object Main
     Animation.unit(openBoxSprite).runAnimation(animatedStandingHeroPos.stopE, timeE, timeB)
   
   animatedStandingHeroPos.stopE.foreach {_ =>
-    messageBox.display("Monster-in-a-box!") {() =>
-      BattleScreen.run
+    messageBox.display("Monster-in-a-box!") {() => ()}
+  }
+  
+  val zoomEffectAmount = 1.0
+  val zoomEffectDelay = 1.0
+  val zoomEffectDuration = 0.15
+  val zoomEffectAnimation = Animation.math(t0 =>
+    if (t0 < zoomEffectDelay) {
+      0.0
+    } else {
+      val t1 = t0 - zoomEffectDelay
+      if (t1 < zoomEffectDuration) {
+        val t = t1
+        t / zoomEffectDuration * zoomEffectAmount
+      } else if (t1 < 2*zoomEffectDuration) {
+        val t = t1 - zoomEffectDuration
+        (1 - t / zoomEffectDuration) * zoomEffectAmount
+      } else {
+        val t = t1 - 2*zoomEffectDuration
+        t / zoomEffectDuration * zoomEffectAmount
+      }
     }
+  ).during(zoomEffectDelay + 3*zoomEffectDuration)
+  val animatedZoom =
+    Animated.unit(0.0) ||
+    zoomEffectAnimation.runAnimation(animatedStandingHeroPos.stopE, timeE, timeB)
+  
+  val blackScreenDuration = 0.15
+  val animatedBlackScreen: Animated[Boolean] =
+    Animated.unit(false) ||
+    Animation.unit(true).during(blackScreenDuration).runAnimation(animatedZoom.stopE, timeE, timeB)
+  
+  animatedBlackScreen.stopE.foreach {_ =>
+    BattleScreen.run
   }
   
   var playingIntro = false
@@ -107,21 +138,26 @@ object Main
   }
   
   render {
-    caveBackgroundSprite.render(Vec(192, -16))
-    animatedBoxSprite.render(boxPos)
-    if (playingIntro) {
-      if (animatedWalkingHeroPos.activeB) {
-        animatedWalkSprite.render(heroPos.value + animatedWalkingHeroPos.valueB.value)
-      } else {
-        heroSprite.render(heroPos.value + animatedStandingHeroPos.valueB.value)
+    if (!animatedBlackScreen) {
+      if (animatedZoom.activeB) {
+        globalScale = 1 + animatedZoom.toFloat
       }
+      caveBackgroundSprite.render(Vec(192, -16))
+      animatedBoxSprite.render(boxPos)
+      if (playingIntro) {
+        if (animatedWalkingHeroPos.activeB) {
+          animatedWalkSprite.render(heroPos.value + animatedWalkingHeroPos.valueB.value)
+        } else {
+          heroSprite.render(heroPos.value + animatedStandingHeroPos.valueB.value)
+        }
+      }
+      caveForegroundSprite.render(Vec(192, -16))
+      if (!playingIntro) {
+        darkerSprite.render(darkerPos)
+        titleSprite.render(Vec(192, 0) + titlePos)
+      }
+      messageBox.render
     }
-    caveForegroundSprite.render(Vec(192, -16))
-    if (!playingIntro) {
-      darkerSprite.render(darkerPos)
-      titleSprite.render(Vec(192, 0) + titlePos)
-    }
-    messageBox.render
     
     Adjust.render(this)
     
