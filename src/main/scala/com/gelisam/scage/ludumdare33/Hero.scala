@@ -13,7 +13,7 @@ class Hero(
   timeB: Behavior[Double]
 )(
   implicit observer: Observer
-) extends Attacker with Damageable {
+) extends Damageable(100) with Attacker {
   val sprite = Sprite("hero.png", 3)
   val pos = Adjustable[Vec]("heroPos")
   
@@ -54,15 +54,13 @@ class Hero(
     attackE fire ()
   }
   
-  var totalHp = 100
-  var hp = totalHp
-  
   val damagePos = Adjustable[Vec]("heroDamagePos")
   val damageDisplay = new Damage(timeE, timeB)
   
   var recoil = new Recoil(timeE, timeB)
   
-  def takeDamage(damage: Int) {
+  override def takeDamage(damage: Int) {
+    super.takeDamage(damage)
     recoil()
     damageDisplay(s"${damage}")
   }

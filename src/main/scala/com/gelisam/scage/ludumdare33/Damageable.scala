@@ -1,5 +1,12 @@
 package com.gelisam.scage.ludumdare33
 
-trait Damageable {
-  def takeDamage(damage: Int)
+class Damageable(var totalHp: Int) {
+  var hp = totalHp
+  
+  def takeDamage(damage: Int) {
+    hp -= damage
+    if (hp < 0) {
+      hp = 0
+    }
+  }
 }
