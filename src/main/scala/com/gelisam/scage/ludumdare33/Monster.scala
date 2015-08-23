@@ -13,7 +13,7 @@ class Monster(
   timeB: Behavior[Double]
 )(
   implicit observer: Observer
-) extends Damageable {
+) extends Attacker with Damageable {
   val sprite = Sprite("monster.png", 5)
   val attackingSprite = Sprite("monster-hi.png", 5)
   val pos = Adjustable[Vec]("monsterPos")

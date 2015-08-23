@@ -13,9 +13,15 @@ class Hero(
   timeB: Behavior[Double]
 )(
   implicit observer: Observer
-) extends Damageable {
+) extends Attacker with Damageable {
   val sprite = Sprite("hero.png", 3)
   val pos = Adjustable[Vec]("heroPos")
+  
+  val attackPower = 10
+  
+  def attack(target: Damageable) {
+    target.takeDamage(attackPower)
+  }
   
   var totalHp = 100
   var hp = totalHp
