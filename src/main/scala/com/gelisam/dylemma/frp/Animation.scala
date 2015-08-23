@@ -13,13 +13,13 @@ case class Animated[A](
 )(
   implicit observer: Observer
 ) {
-  val idleB = Behavior.stepper(false, stopE.map(_ => true)
-                                   || startE.map(_ => false))
+  val activeB = Behavior.stepper(false, startE.map(_ => true)
+                                     || stopE.map(_ => false))
   
   def map[B](f: A => B): Animated[B] =
     Animated(startE, valueB.map(f), stopE)
   def map2[B,C](that: Animated[B])(f: (A,B) => C): Animated[C] = {
-    val eitherStartE = (startE || that.startE).filter(_ => idleB && that.idleB)
+    val eitherStartE = (startE || that.startE).filter(_ => !activeB && !that.activeB)
     
     val idleChangeE: EventStream[(Boolean, Boolean) => (Boolean, Boolean)] =
       startE.map    (_ => (    _:Boolean,     _:Boolean) => (false, false)) ||
@@ -37,7 +37,7 @@ case class Animated[A](
   
   // play whichever animation started last, starting with this one.
   def ||(that: Animated[A]): Animated[A] = {
-    val eitherStartE = (startE || that.startE).filter(_ => idleB && that.idleB)
+    val eitherStartE = (startE || that.startE).filter(_ => !activeB && !that.activeB)
     
     // false => this
     // true => that
