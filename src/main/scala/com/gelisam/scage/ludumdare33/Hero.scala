@@ -22,17 +22,23 @@ class Hero(
   val attackDelay = Adjustable[Double]("attackDelay")
   val lurchForwardDistance = Adjustable[Double]("heroLurchForwardDistance")
   val lurchForwardDuration = Adjustable[Double]("heroLurchForwardDuration")
-  var lurchForwardAnimation = Animation.math(t =>
-    t / lurchForwardDuration * lurchForwardDistance
-  ).during(lurchForwardDuration)
-  val lurchBackAnimation = Animation.math(t =>
-    (1 - t / lurchForwardDuration) * lurchForwardDistance
-  ).during(lurchForwardDuration)
+  val lurchForwardAnimation = Animation.math(t0 =>
+    if (t0 < lurchForwardDuration) {
+      val t = t0
+      t / lurchForwardDuration * lurchForwardDistance
+    } else if (t0 < 2*lurchForwardDuration) {
+      val t = t0 - lurchForwardDuration
+      (1 - t / lurchForwardDuration) * lurchForwardDistance
+    } else if (t0 < 3*lurchForwardDuration) {
+      val t = t0 - 2*lurchForwardDuration
+      t / lurchForwardDuration * lurchForwardDistance
+    } else {
+      val t = t0 - 3*lurchForwardDuration
+      (1 - t / lurchForwardDuration) * lurchForwardDistance
+    }
+  ).during(4*lurchForwardDuration)
   val attackAnimation =
     lurchForwardAnimation ++
-    lurchBackAnimation ++
-    lurchForwardAnimation ++
-    lurchBackAnimation ++
     Animation.unit(0.0).during(attackDelay)
   val animatedOffset =
     Animated.unit(0.0) ||
@@ -65,9 +71,7 @@ class Hero(
     openglLocalTransform {
       openglMove(pos)
       if (!recoil.animatedBlink) {
-        // hack to work around bugs in my animation library
-        val adjustedOffset = Adjust.limit(0, animatedOffset, lurchForwardDistance)
-        sprite.render(Vec(-adjustedOffset, 0))
+        sprite.render(Vec(-animatedOffset, 0))
       }
       damageDisplay.render(damagePos)
     }
