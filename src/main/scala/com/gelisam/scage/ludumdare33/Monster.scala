@@ -18,6 +18,7 @@ class Monster(
   val attackingSprite = Sprite("monster-hi.png", 5)
   val pos = Adjustable[Vec]("monsterPos")
   
+  val attackPower = 80
   val attackE = EventSource[Unit]
   val attackHiDuration = Adjustable[Double]("monsterAttackHiDuration")
   val attackLoDuration = Adjustable[Double]("monsterAttackLoDuration")
@@ -32,34 +33,33 @@ class Monster(
     Animated.unit(sprite) ||
     attackAnimation.runAnimation(attackE, timeE, timeB)
   
+  var target: Damageable = null
+  animatedSprite.stopE.foreach{_ =>
+    target.takeDamage(attackPower)
+  }
+  
+  def attack(target: Damageable) {
+    this.target = target
+    attackE fire ()
+  }
+  
   var totalHp = 3000
   var hp = totalHp
   
   val damagePos = Adjustable[Vec]("monsterDamagePos")
   val damageDisplay = new Damage(timeE, timeB)
   
-  var recoilE = EventSource[Unit]
-  var recoilAnimation: Animation[Boolean] =
-    Animation.unit(false).during(0.08) ++
-    Animation.unit(true).during(0.08) ++
-    Animation.unit(false).during(0.08) ++
-    Animation.unit(true).during(0.08) ++
-    Animation.unit(false).during(0.08) ++
-    Animation.unit(true).during(0.08) ++
-    Animation.unit(false).during(0.08)
-  var animatedBlink =
-    Animated.unit(false) ||
-    recoilAnimation.runAnimation(recoilE, timeE, timeB)
+  var recoil = new Recoil(timeE, timeB)
   
   def takeDamage(damage: Int) {
-    recoilE fire ()
+    recoil()
     damageDisplay(s"${damage}")
   }
   
   def render {
     openglLocalTransform {
       openglMove(pos)
-      if (!animatedBlink) animatedSprite.render()
+      if (!recoil.animatedBlink) animatedSprite.render()
       damageDisplay.render(damagePos)
     }
   }

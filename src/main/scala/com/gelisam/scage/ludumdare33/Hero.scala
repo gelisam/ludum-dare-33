@@ -23,14 +23,17 @@ class Hero(
   val damagePos = Adjustable[Vec]("heroDamagePos")
   val damageDisplay = new Damage(timeE, timeB)
   
+  var recoil = new Recoil(timeE, timeB)
+  
   def takeDamage(damage: Int) {
+    recoil()
     damageDisplay(s"${damage}")
   }
   
   def render {
     openglLocalTransform {
       openglMove(pos)
-      sprite.render()
+      if (!recoil.animatedBlink) sprite.render()
       damageDisplay.render(damagePos)
     }
   }
