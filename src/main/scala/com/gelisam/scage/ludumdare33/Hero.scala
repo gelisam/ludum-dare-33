@@ -25,39 +25,22 @@ class Hero(
   var lurchForwardAnimation = Animation.math(t =>
     t / lurchForwardDuration * lurchForwardDistance
   ).during(lurchForwardDuration)
-  var lurchBackAnimation = Animation.math(t =>
+  val lurchBackAnimation = Animation.math(t =>
     (1 - t / lurchForwardDuration) * lurchForwardDistance
   ).during(lurchForwardDuration)
-  var attackAnimation =
+  val attackAnimation =
     lurchForwardAnimation ++
     lurchBackAnimation ++
     lurchForwardAnimation ++
     lurchBackAnimation ++
     Animation.unit(0.0).during(attackDelay)
-  var animatedOffset =
+  val animatedOffset =
     Animated.unit(0.0) ||
     attackAnimation.runAnimation(attackE, timeE, timeB)
   
   var target: Damageable = null
   animatedOffset.stopE.foreach{_ =>
     target.takeDamage(attackPower)
-    
-    // tweak the timing at runtime
-    lurchForwardAnimation = Animation.math(t =>
-      t / lurchForwardDuration * lurchForwardDistance
-    ).during(lurchForwardDuration)
-    lurchBackAnimation = Animation.math(t =>
-      (1 - t / lurchForwardDuration) * lurchForwardDistance
-    ).during(lurchForwardDuration)
-    attackAnimation =
-      lurchForwardAnimation ++
-      lurchBackAnimation ++
-      lurchForwardAnimation ++
-      lurchBackAnimation ++
-      Animation.unit(0.0).during(attackDelay)
-    animatedOffset =
-      Animated.unit(0.0) ||
-      attackAnimation.runAnimation(attackE, timeE, timeB)
   }
   
   def attack(target: Damageable) {
