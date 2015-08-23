@@ -57,8 +57,17 @@ object Main
   val titleSprite = Sprite("title.png", 3)
   val titlePos = Adjustable[Vec]("titlePos")
   
+  val heroSprite = Sprite("hero.png", 4)
+  val heroPos = Adjustable[Vec]("caveHeroPos")
+  
+  val closedBoxSprite = Sprite("closed-box.png", 2)
+  val openBoxSprite = Sprite("open-box.png", 2)
+  val boxPos = Adjustable[Vec]("treasureChestPos")
+  
   render {
     caveBackgroundSprite.render(Vec(192, -16))
+    closedBoxSprite.render(boxPos)
+    heroSprite.render(heroPos)
     caveForegroundSprite.render(Vec(192, -16))
     darkerSprite.render(darkerPos)
     titleSprite.render(Vec(192, 0) + titlePos)
