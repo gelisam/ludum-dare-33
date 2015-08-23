@@ -22,7 +22,7 @@ object Behavior {
   implicit def getValue[A]: Behavior[A] => A = _.value
   
   val updateBehaviorsE = EventSource[Unit]
-  def updateBehaviors = updateBehaviorsE fire Unit
+  def updateBehaviors = updateBehaviorsE fire ()
   
   def unit[A](value: A)(implicit obs: Observer): Behavior[A] = {
     val neverE = EventSource[A]
