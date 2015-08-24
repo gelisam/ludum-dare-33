@@ -159,7 +159,9 @@ object Main
     intermissionBlackScrenAnimation.runAnimation(playIntermissionE, timeE, timeB)
   
   animatedIntermissionBlackScreen.stopE.foreach {_ =>
-    println("I guess I need to grind more levels...")
+    messageBox.display("Hero: \"I guess I need to grind a few more levels...\"") {() =>
+      // ...
+    }
   }
   
   def playIntermission {
