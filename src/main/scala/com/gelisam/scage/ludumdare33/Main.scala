@@ -46,8 +46,15 @@ object Main
     if (keyPressed(KEY_N)) 4
     else 1
 
+  var elapsedTime = 0L
+  var lastTime = 0L
   action {
-    tickE fire (msecsFromInitWithoutPause * timeMultiplier)
+    val newTime = msecsFromInitWithoutPause
+    val timeDelta = newTime - lastTime
+    lastTime = newTime
+    elapsedTime += timeDelta * timeMultiplier
+    tickE fire elapsedTime
+    
     Behavior.updateBehaviors
     
     // Check for memory leaks. Enabling this will make the game super slow, but if there are
